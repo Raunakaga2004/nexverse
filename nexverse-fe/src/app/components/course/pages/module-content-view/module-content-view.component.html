@@ -1,0 +1,49 @@
+@if (loading) {
+  <div class="loading-container">
+    <mat-spinner diameter="50"></mat-spinner>
+  </div>
+} @else if (content) {
+  <div class="dashboard-content-page content-page">
+    <div class="page-header">
+      <button mat-icon-button (click)="navigateBack()">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+
+      <div class="header-content">
+        <h2>{{ content.title }}</h2>
+        <span>{{ content.description }}</span>
+      </div>
+    </div>
+
+    @if (content.contentType === ContentType.TEXT) {
+      <div class="lesson-content" [innerHTML]="content.textBody"></div>
+    }
+
+    @if (content.contentType === ContentType.DOCUMENT) {
+      @if (documentFileUrl) {
+        <iframe [src]="documentUrl" class="document-viewer"> </iframe>
+      } @else {
+        <div class="viewer-loading">
+          <mat-spinner diameter="40"></mat-spinner>
+        </div>
+      }
+    }
+
+    @if (content.contentType === ContentType.VIDEO) {
+      @if (videoUrl) {
+        <video
+          class="video-player"
+          controls
+          controlsList="nodownload noremoteplayback"
+          disablePictureInPicture
+          [src]="videoUrl"
+          preload="metadata"
+        ></video>
+      } @else {
+        <div class="viewer-loading">
+          <mat-spinner diameter="40"></mat-spinner>
+        </div>
+      }
+    }
+  </div>
+}

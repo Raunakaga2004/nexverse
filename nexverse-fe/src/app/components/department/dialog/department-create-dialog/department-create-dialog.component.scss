@@ -1,0 +1,31 @@
+:host {
+    display: block;
+    width: 100%;
+}
+ 
+mat-dialog-content {
+    min-width: 420px;
+    padding-top: 8px;
+}
+ 
+.full-width {
+    width: 100%;
+    margin-top: 28px;
+}
+ 
+mat-dialog-actions {
+    padding: 16px 24px 20px;
+    gap: 12px;
+}
+ 
+button[mat-flat-button] {
+    min-width: 110px;
+}
+ 
+mat-spinner {
+    margin: 0 auto;
+}
+
+.dialog-box{
+    border-radius: 4px;
+}

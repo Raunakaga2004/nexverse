@@ -1,0 +1,26 @@
+:host {
+    display: block;
+}
+
+.dialog-box {
+    border-radius: 4px;
+    padding-top: 14px;
+}
+
+h2{
+    margin: 0px 20px;
+}
+
+mat-dialog-content {
+    min-width: 380px;
+    color: #555;
+    line-height: 1.6;
+}
+
+mat-dialog-actions {
+    padding-top: 16px;
+}
+
+button{
+    min-width: 90px;
+}

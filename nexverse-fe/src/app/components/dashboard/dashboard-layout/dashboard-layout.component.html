@@ -1,0 +1,15 @@
+@if (loading) {
+  <div class="loading-container">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+} @else {
+  <div class="dashboard-layout">
+    <app-dashboard-navbar [currentUser]="currentUser!"></app-dashboard-navbar>
+    <div class="dashboard-body">
+      <app-dashboard-sidebar class="dashboard-sidebar"></app-dashboard-sidebar>
+      <main class="dashboard-content">
+        <router-outlet></router-outlet>
+      </main>
+    </div>
+  </div>
+}

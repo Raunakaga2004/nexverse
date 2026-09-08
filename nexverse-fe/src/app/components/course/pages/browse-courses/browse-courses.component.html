@@ -1,0 +1,110 @@
+<div class="dashboard-content-page browse-courses-page">
+  <div class="page-header">
+    <h2>Browse Courses</h2>
+    <p>Discover courses available to your department and organization.</p>
+  </div>
+  <mat-divider></mat-divider>
+  <div class="toolbar">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Search Courses</mat-label>
+      <input matInput placeholder="" [formControl]="searchControl" />
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="record-state-field">
+      <mat-label>Level</mat-label>
+      <mat-select [formControl]="levelControl">
+        @for (level of levelOptions; track $index) {
+          <mat-option [value]="level">{{ level | titlecase }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="record-state-field">
+      <mat-label>Access Type</mat-label>
+      <mat-select [formControl]="accessTypeControl">
+        @for (
+          courseAccessType of courseAccessTypeOptions;
+          track courseAccessType
+        ) {
+          <mat-option [value]="courseAccessType">
+            @if (courseAccessType === "REQUEST_REQUIRED") {
+              Request Required
+            } @else {
+              {{ courseAccessType | titlecase }}
+            }
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <mat-divider></mat-divider>
+
+  @if (courses.length === 0) {
+    <app-no-data icon="school" title="No Courses Found" message="Try changing your search or filters."></app-no-data>
+  } @else {
+    <div class="course-grid">
+      @for (course of courses; track course.id) {
+        <mat-card
+          class="course-card"
+          [routerLink]="['/dashboard/browse-course', course.id]"
+        >
+          <div class="thumbnail">
+            <img
+              [src]="`${apiUrl}/course/${course.id}/thumbnail`"
+              class="thumbnail-image"
+            />
+            <!-- <mat-icon>menu_book</mat-icon> -->
+          </div>
+
+          <mat-card-content>
+            <div class="course-header">
+              <h3>
+                {{ course.title }}
+              </h3>
+
+              <div class="course-level">
+                {{ course.level | titlecase }}
+              </div>
+            </div>
+
+            <p class="description">
+              {{ course.shortDescription }}
+            </p>
+
+            <div class="course-info">
+              <span>
+                <mat-icon>schedule</mat-icon>
+
+                {{ course.estimatedDurationSeconds / 3600 | number: "1.0-1" }}
+                hrs
+              </span>
+
+              <span>
+                <mat-icon>business</mat-icon>
+
+                {{ course.department }}
+              </span>
+            </div>
+
+            <div class="skill-list">
+              @for (skill of course.courseSkills; track skill.id) {
+                <mat-chip>
+                  {{ skill.skill.name }}
+                </mat-chip>
+              }
+            </div>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+    @if (totalElements > 6) {
+      <mat-paginator
+        [length]="totalElements"
+        [pageIndex]="page - 1"
+        [pageSize]="size"
+        [pageSizeOptions]="[6, 12, 24]"
+        (page)="onPageChange($event)"
+      >
+      </mat-paginator>
+    }
+  }
+</div>

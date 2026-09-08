@@ -1,0 +1,18 @@
+@switch (role) {
+  @case ("SUPER_ADMIN") {
+    <app-super-admin-dashboard></app-super-admin-dashboard>
+  }
+  @case ("ADMIN") {
+    <app-org-admin-dashboard></app-org-admin-dashboard>
+  }
+  @case ("MANAGER") {
+    @if (urlPath === "/dashboard/overview") {
+      <app-employee-dashboard></app-employee-dashboard>
+    } @else {
+      <app-dep-manager-dashboard></app-dep-manager-dashboard>
+    }
+  }
+  @case ("EMPLOYEE") {
+    <app-employee-dashboard></app-employee-dashboard>
+  }
+}

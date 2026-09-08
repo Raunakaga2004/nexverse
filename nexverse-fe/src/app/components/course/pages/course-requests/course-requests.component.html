@@ -1,0 +1,252 @@
+<div class="dashboard-content-page course-requests-page">
+  <div class="page-header">
+    <h2>Course Requests</h2>
+    <p>Review and manage course access requests.</p>
+  </div>
+
+  <mat-tab-group
+    [(selectedIndex)]="selectedTabIndex"
+    (selectedIndexChange)="onTabChange($event)"
+    class="request-tabs"
+  >
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <span>Department Requests</span>
+      </ng-template>
+
+      <div class="tab-content">
+        <div class="toolbar">
+          <mat-form-field appearance="outline" class="search-field">
+            <mat-label>Search Courses</mat-label>
+            <input matInput placeholder="" [formControl]="searchControl" />
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="record-state-field">
+            <mat-label>Request Status</mat-label>
+            <mat-select [formControl]="requestStatusControl">
+              @for (requestStatus of requestStatuses; track $index) {
+                <mat-option [value]="requestStatus">{{
+                  requestStatus | titlecase
+                }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+        @if (isLoading) {
+          <div class="loading-state">
+            <mat-spinner diameter="40"></mat-spinner>
+            <p>Loading requests...</p>
+          </div>
+        } @else if (departmentRequests.length === 0) {
+          <app-no-data
+            icon="pending_actions"
+            title="No Requests Found"
+            message="No course requests yet."
+          ></app-no-data>
+        } @else {
+          <div class="requests-list">
+            @for (request of departmentRequests; track request.id) {
+              <div class="request-item">
+                <div class="request-main">
+                  <div class="request-title-row">
+                    <h3>
+                      {{ request.courseName }}
+                    </h3>
+
+                    <span
+                      class="status-badge"
+                      [class.pending]="isPending(request.requestStatus)"
+                      [class.approved]="isApproved(request.requestStatus)"
+                      [class.rejected]="isRejected(request.requestStatus)"
+                    >
+                      {{ request.requestStatus }}
+                    </span>
+                  </div>
+
+                  <div class="request-meta">
+                    <div class="meta-item">
+                      <mat-icon>business</mat-icon>
+
+                      <span>
+                        {{ request.requestingDepartment }}
+                      </span>
+                    </div>
+
+                    <div class="meta-item">
+                      <mat-icon>person</mat-icon>
+
+                      <span> Requested by {{ request.requestedBy }} </span>
+                    </div>
+                  </div>
+
+                  @if (request.requestNote) {
+                    <div class="request-note">
+                      <span class="note-label">Request note</span>
+
+                      <p>
+                        {{ request.requestNote }}
+                      </p>
+                    </div>
+                  }
+                </div>
+
+                <div class="request-actions">
+                  @if (isPending(request.requestStatus)) {
+                    <button
+                      mat-button
+                      type="button"
+                      [disabled]="isUpdatingStatus"
+                      (click)="rejectDepartmentRequest(request)"
+                    >
+                      Reject
+                    </button>
+
+                    <button
+                      mat-flat-button
+                      type="button"
+                      [disabled]="isUpdatingStatus"
+                      (click)="approveDepartmentRequest(request)"
+                    >
+                      Approve
+                    </button>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+          @if (departmentTotalElements > 10) {
+            <mat-paginator
+              [length]="departmentTotalElements"
+              [pageSize]="pageSize"
+              [pageIndex]="departmentPage-1"
+              [pageSizeOptions]="[10]"
+              (page)="onDepartmentPageChange($event.pageIndex)"
+              showFirstLastButtons
+            >
+            </mat-paginator>
+          }
+        }
+      </div>
+    </mat-tab>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <span>Employee Requests</span>
+      </ng-template>
+
+      <div class="tab-content">
+        <div class="toolbar">
+          <mat-form-field appearance="outline" class="search-field">
+            <mat-label>Search Courses</mat-label>
+            <input matInput placeholder="" [formControl]="searchControl" />
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="record-state-field">
+            <mat-label>Request Status</mat-label>
+            <mat-select [formControl]="requestStatusControl">
+              @for (requestStatus of requestStatuses; track $index) {
+                <mat-option [value]="requestStatus">{{
+                  requestStatus | titlecase
+                }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+        @if (isLoading) {
+          <div class="loading-state">
+            <mat-spinner diameter="40"></mat-spinner>
+
+            <p>Loading requests...</p>
+          </div>
+        } @else if (employeeRequests.length === 0) {
+          <app-no-data
+            icon="pending_actions"
+            title="No Requests Found"
+            message="No course requests yet."
+          ></app-no-data>
+        } @else {
+          <div class="requests-list">
+            @for (request of employeeRequests; track request.id) {
+              <div class="request-item">
+                <div class="request-main">
+                  <div class="request-title-row">
+                    <h3>
+                      {{ request.courseName }}
+                    </h3>
+
+                    <span
+                      class="status-badge"
+                      [class.pending]="isPending(request.accessRequestStatus)"
+                      [class.approved]="isApproved(request.accessRequestStatus)"
+                      [class.rejected]="isRejected(request.accessRequestStatus)"
+                    >
+                      {{ request.accessRequestStatus | titlecase }}
+                    </span>
+                  </div>
+
+                  <div class="request-meta">
+                    <div class="meta-item">
+                      <mat-icon>person</mat-icon>
+
+                      <span>
+                        {{ request.employeeName }}
+                      </span>
+                    </div>
+                    <div class="meta-item">
+                      <mat-icon>business</mat-icon>
+
+                      <span>
+                        {{ request.department }}
+                      </span>
+                    </div>
+                  </div>
+
+                  @if (request.requestNote) {
+                    <div class="request-note">
+                      <span class="note-label"> Request note </span>
+
+                      <p>
+                        {{ request.requestNote }}
+                      </p>
+                    </div>
+                  }
+                </div>
+                <div class="request-actions">
+                  @if (isPending(request.accessRequestStatus)) {
+                    <button
+                      mat-button
+                      type="button"
+                      [disabled]="isUpdatingStatus"
+                      (click)="rejectEmployeeRequest(request)"
+                    >
+                      Reject
+                    </button>
+
+                    <button
+                      mat-flat-button
+                      type="button"
+                      [disabled]="isUpdatingStatus"
+                      (click)="approveEmployeeRequest(request)"
+                    >
+                      Approve
+                    </button>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+          @if (employeeTotalElements > 10) {
+            <mat-paginator
+              [length]="departmentTotalElements"
+              [pageSize]="pageSize"
+              [pageIndex]="employeePage-1"
+              [pageSizeOptions]="[10]"
+              (page)="onEmployeePageChange($event.pageIndex)"
+              showFirstLastButtons
+            >
+            </mat-paginator>
+          }
+        }
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>

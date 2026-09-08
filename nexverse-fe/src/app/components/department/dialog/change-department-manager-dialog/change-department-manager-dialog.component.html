@@ -1,0 +1,60 @@
+<h2 mat-dialog-title>Change Department Manager</h2>
+
+<mat-dialog-content>
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Search Employee</mat-label>
+    <input
+      matInput
+      type="text"
+      [formControl]="searchControl"
+      placeholder="Search by name or employee code"
+    />
+  </mat-form-field>
+
+  <div class="employee-list" (scroll)="onScroll($event)">
+    <mat-selection-list [multiple]="false">
+      @for (employee of employees; track employee.id) {
+        <mat-list-option
+          [selected]="selectedEmployeeId === employee.id"
+          (click)="selectEmployee(employee.id)"
+        >
+          <div class="employee-item">
+            <div class="employee-name">
+              {{ `${employee.firstName} ${employee.lastName ?? ""}` }}
+              @if (employee.role === "MANAGER") {
+                <span class="warning">
+                  <mat-icon color="warn">info</mat-icon>
+                  Already a manager of&nbsp;<strong>{{employee.departmentName}}</strong>
+                </span>
+              }
+            </div>
+
+            <div class="employee-email">
+              {{ employee.email }}
+            </div>
+          </div>
+        </mat-list-option>
+      }
+    </mat-selection-list>
+    @if (loading) {
+      <div class="loading-container">
+        <mat-spinner diameter="30"></mat-spinner>
+      </div>
+    }
+    @if (!loading && employees.length === 0) {
+      <div class="empty-state">No employees found</div>
+    }
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="close()">Cancel</button>
+  <button
+    mat-flat-button
+    color="primary"
+    type="button"
+    [disabled]="!selectedEmployeeId || assigning"
+    (click)="assignManager()"
+  >
+    Assign Manager
+  </button>
+</mat-dialog-actions>

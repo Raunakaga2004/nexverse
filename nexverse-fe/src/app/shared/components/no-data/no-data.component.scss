@@ -1,0 +1,22 @@
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #9ca3af;
+
+  mat-icon {
+    font-size: 70px;
+    width: 70px;
+    height: 70px;
+    margin-bottom: 0px;
+    color: var(--color-primary);
+  }
+
+  h2 {
+    margin: 0;
+    color: #374151;
+  }
+
+  p {
+    margin-top: 8px;
+  }
+}

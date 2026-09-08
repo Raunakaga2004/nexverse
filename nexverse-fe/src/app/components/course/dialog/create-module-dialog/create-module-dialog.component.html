@@ -1,0 +1,43 @@
+<h2 mat-dialog-title>
+  {{ data ? "Edit Module" : "Create Module" }}
+</h2>
+<mat-dialog-content>
+  <form [formGroup]="moduleForm">
+    <mat-form-field appearance="outline" class="full-width first-field">
+      <mat-label>Module Title</mat-label>
+      <input matInput formControlName="title" maxlength="100" />
+      @if (moduleForm.get("title")?.hasError("required")) {
+        <mat-error> Module title is required. </mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Description</mat-label>
+      <textarea
+        matInput
+        rows="5"
+        maxlength="1000"
+        formControlName="description"
+      >
+      </textarea>
+      <mat-hint align="end">
+        {{ moduleForm.get("description")?.value?.length || 0 }}/1000
+      </mat-hint>
+    </mat-form-field>
+    <div class="slide-toggle">
+      <mat-slide-toggle formControlName="isMandatory">
+        <span>Mandatory Module</span>
+      </mat-slide-toggle>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button
+    mat-flat-button
+    color="primary"
+    [disabled]="moduleForm.invalid"
+    (click)="save()"
+  >
+    {{ data ? "Update" : "Create" }}
+  </button>
+</mat-dialog-actions>

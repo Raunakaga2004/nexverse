@@ -1,0 +1,30 @@
+<nav class="sidebar">
+  @for (item of sidebarItems; track item.route) {
+    <a
+      class="sidebar-item"
+      [routerLink]="item.route"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      <mat-icon>{{ item.icon }}</mat-icon>
+      <span>{{ item.label }}</span>
+    </a>
+  }
+  @if (currentRole === "MANAGER") {
+    <div class="personal-manager-section">
+      <span class="sidebar-heading">Personal</span>
+      <mat-divider></mat-divider>
+      @for (item of managerPersonalSidebarItems; track item.route) {
+        <a
+          class="sidebar-item"
+          [routerLink]="item.route"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <mat-icon>{{ item.icon }}</mat-icon>
+          <span>{{ item.label }}</span>
+        </a>
+      }
+    </div>
+  }
+</nav>

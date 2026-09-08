@@ -1,0 +1,43 @@
+<h2 mat-dialog-title>Department Details</h2>
+ 
+<mat-dialog-content>
+ 
+    <div class="detail-row">
+        <span class="label">Department Name</span>
+        <span>{{ department.name }}</span>
+    </div>
+ 
+    <div class="detail-row">
+        <span class="label">Department Manager</span>
+        <span>{{ department.managerName || 'Not Assigned' }}</span>
+    </div>
+ 
+    <div class="detail-row">
+        <span class="label">Employees</span>
+        <span>{{ department.employeeCount }}</span>
+    </div>
+ 
+    <div class="detail-row">
+        <span class="label">Created At</span>
+        <span>{{ department.createdAt | date:'medium' }}</span>
+    </div>
+ 
+    <div class="detail-row">
+        <span class="label">Last Updated</span>
+        <span>{{ department.updatedAt | date:'medium' }}</span>
+    </div>
+ 
+</mat-dialog-content>
+ 
+<mat-dialog-actions align="end">
+ 
+    <button
+        mat-flat-button
+        color="primary"
+        (click)="close()">
+ 
+        Close
+ 
+    </button>
+ 
+</mat-dialog-actions>

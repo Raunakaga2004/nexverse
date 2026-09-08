@@ -1,0 +1,50 @@
+<h2 mat-dialog-title>Import Employees</h2>
+
+<mat-dialog-content>
+  <p class="description">
+    Upload an Excel file containing employee information. Download the template
+    below to ensure the correct format.
+  </p>
+
+  <app-file-upload
+    accept=".xlsx,.xls"
+    label="Drag & Drop Excel File"
+    hint="or click to browse"
+    (fileSelected)="onFileSelected($event)"
+  >
+  </app-file-upload>
+
+  <mat-divider></mat-divider>
+
+  <div class="template-section">
+    <div class="template-info">
+      <mat-icon>description</mat-icon>
+
+      <div>
+        <div class="title">Employee Import Template</div>
+      </div>
+    </div>
+
+    <button mat-stroked-button color="primary" (click)="downloadTemplate()">
+      <mat-icon>download</mat-icon>
+      Download
+    </button>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button [disabled]="loading" (click)="close()">Cancel</button>
+
+  <button
+    mat-flat-button
+    color="primary"
+    [disabled]="!selectedFile || loading"
+    (click)="importEmployees()"
+  >
+    @if (loading) {
+      <mat-spinner diameter="20"></mat-spinner>
+    } @else {
+      <div class="import-employees-button"><mat-icon>upload</mat-icon>Import Employees</div>
+    }
+  </button>
+</mat-dialog-actions>

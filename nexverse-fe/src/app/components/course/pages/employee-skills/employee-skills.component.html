@@ -1,0 +1,77 @@
+<div class="dashboard-content-page skills-page">
+  <div class="page-header">
+    <h2>My Skills</h2>
+    <p>Skills earned by successfully completing courses.</p>
+  </div>
+  <mat-divider></mat-divider>
+  <div class="filters">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Search Skills</mat-label>
+
+      <input
+        matInput
+        [formControl]="searchControl"
+        placeholder="Search by skill name"
+      />
+
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="level-field">
+      <mat-label>Skill Level</mat-label>
+
+      <mat-select [formControl]="skillLevelControl">
+        <mat-option value="ALL"> All </mat-option>
+        <mat-option value="BEGINNER"> Beginner </mat-option>
+        <mat-option value="INTERMEDIATE"> Intermediate </mat-option>
+        <mat-option value="ADVANCED"> Advanced </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <mat-divider></mat-divider>
+
+  @if (loading) {
+    <div class="loading-state">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+  } @else {
+    @if (skills.length === 0) {
+      <app-no-data icon="workspace_premium" title="No Skills Found" message="Complete courses to unlock skills."></app-no-data>
+    } @else {
+      <div class="skills-grid">
+        @for (skill of skills; track skill.skillId) {
+          <mat-card class="skill-card">
+            <div class="skill-header">
+              <div class="skill-icon">
+                <mat-icon> workspace_premium </mat-icon>
+              </div>
+              <div class="skill-info">
+                <h3>{{ skill.skillName }}</h3>
+                <span class="total">
+                  {{ getTotalAcquired(skill) }}
+                  Total
+                </span>
+              </div>
+            </div>
+
+            <mat-divider></mat-divider>
+
+            <div class="levels">
+              @for (level of skill.levels; track level.level) {
+                <div class="level-row">
+                  <span class="level-name">
+                    {{ level.level | titlecase }}
+                  </span>
+
+                  <span class="badge">
+                    {{ level.courseCount }}
+                  </span>
+                </div>
+              }
+            </div>
+          </mat-card>
+        }
+      </div>
+    }
+  }
+</div>

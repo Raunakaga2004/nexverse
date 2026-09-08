@@ -1,0 +1,147 @@
+<div class="dashboard-content-page">
+  <div class="page-header">
+    <h2>Skills</h2>
+    <button
+      mat-flat-button
+      color="primary"
+      (click)="createSkill()"
+      class="create-dep-button"
+    >
+      <mat-icon>add</mat-icon>
+      Create
+    </button>
+  </div>
+  <mat-card class="skills-card">
+    <div class="toolbar">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Search</mat-label>
+        <input matInput placeholder="" [formControl]="searchControl" />
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="record-state-field">
+        <mat-label>Archive Status</mat-label>
+        <mat-select [formControl]="enabledControl">
+          @for (status of archiveStatuses; track status) {
+            <mat-option [value]="status">
+              {{ status | titlecase }}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="table-wrapper">
+      @if (skills.length) {
+        <table mat-table [dataSource]="skills" class="skills-table">
+          @for (column of displayedColumns; track column) {
+            <ng-container [matColumnDef]="column">
+              @if (column === "actions") {
+                <th mat-header-cell *matHeaderCellDef>Actions</th>
+                <td mat-cell *matCellDef="let skill">
+                  <button
+                    mat-icon-button
+                    [matMenuTriggerFor]="actionMenu"
+                    (click)="$event.stopPropagation()"
+                  >
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                  <mat-menu #actionMenu="matMenu">
+                    <button mat-menu-item (click)="editSkill(skill)">
+                      <mat-icon>edit</mat-icon>
+                      <span>Edit</span>
+                    </button>
+                    @if (skill.enabled) {
+                      <button mat-menu-item (click)="disableSkill(skill)">
+                        <mat-icon color="warn">archive</mat-icon>
+                        <span>Archive</span>
+                      </button>
+                    } @else {
+                      <button mat-menu-item (click)="enableSkill(skill)">
+                        <mat-icon color="warn">unarchive</mat-icon>
+                        <span>Unarchive</span>
+                      </button>
+                    }
+                  </mat-menu>
+                </td>
+              } @else {
+                <th mat-header-cell *matHeaderCellDef (click)="sort(column)">
+                  @switch (column) {
+                    @case ("phone") {
+                      Phone Number
+                    }
+                    @case ("skillManager") {
+                      Manager
+                    }
+                    @case ("zipCode") {
+                      Zip Code
+                    }
+                    @case ("createdAt") {
+                      Created At
+                    }
+                    @case ("updatedAt") {
+                      Updated At
+                    }
+                    @case ("archiveStatus") {
+                      Archive Status
+                    }
+                    @default {
+                      {{ column | titlecase }}
+                    }
+                  }
+                </th>
+                <td mat-cell *matCellDef="let skill">
+                  @if (column === "createdAt") {
+                    {{ skill.createdAt | date: "dd MMM yyyy" }}
+                  } @else if (column == "updatedAt") {
+                    {{ skill.updatedAt | date: "dd MMM yyyy" }}
+                  } @else if (column == "archiveStatus") {
+                    {{ skill.enabled ? "Non-Archived" : "Archived" }}
+                  } @else if (column == "icon") {
+                    <img
+                      class="skill-icon"
+                      #tooltip="matTooltip"
+                      [matTooltip]="
+                        skill.description == '' || skill.description == null
+                          ? 'No Description'
+                          : skill.description
+                      "
+                      [matTooltipClass]="'skill-icon-tooltip'"
+                      matTooltipPosition="above"
+                      matTooltipHideDelay="3"
+                      [src]="getSkillIconUrl(skill.id)"
+                      alt="no image ......"
+                    />
+                  } @else {
+                    {{ skill[column] | titlecase }}
+                  }
+                </td>
+              }
+            </ng-container>
+          }
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+        <mat-divider></mat-divider>
+      } @else {
+        <app-no-data
+          icon="workspace_premium"
+          title="No Skill Badges Found"
+          message="There are currently no skill badges to display."
+        >
+        </app-no-data>
+      }
+    </div>
+    @if (totalElements > 10) {
+      <mat-paginator
+        [length]="totalElements"
+        [pageIndex]="query.page - 1"
+        [pageSize]="query.size"
+        [pageSizeOptions]="[10, 20, 50]"
+        [showFirstLastButtons]="true"
+        (page)="pageChanged($event)"
+      >
+      </mat-paginator>
+    }
+    <div class="spacer"></div>
+  </mat-card>
+</div>

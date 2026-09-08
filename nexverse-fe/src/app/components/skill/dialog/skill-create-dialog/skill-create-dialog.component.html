@@ -1,0 +1,77 @@
+<h2 mat-dialog-title>{{ title }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form">
+    <div class="skill-form">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Skill Name</mat-label>
+
+        <input
+          matInput
+          formControlName="name"
+          maxlength="100"
+          placeholder="Enter skill name"
+          autocomplete="off"
+        />
+
+        <mat-hint align="end">
+          {{ form.controls["name"].value.length }}/100
+        </mat-hint>
+
+        @if (form.controls["name"].hasError("required")) {
+          <mat-error> Skill name is required. </mat-error>
+        }
+
+        @if (form.controls["name"].hasError("maxlength")) {
+          <mat-error> Skill name cannot exceed 100 characters. </mat-error>
+        }
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="skill-description">
+        <mat-label>Description</mat-label>
+        <textarea matInput rows="4" formControlName="description"> </textarea>
+      </mat-form-field>
+    </div>
+    <div class="file-upload">
+      <div class="upload-file">
+        <mat-label>
+          Upload Logo<span class="required-asterisk">*</span>
+        </mat-label>
+      </div>
+      <app-file-upload
+        accept=""
+        label="Drag & Drop Badge Icon"
+        hint="or click to browse"
+        (fileSelected)="onIconSelect($event)"
+        [file]="icon"
+      >
+      </app-file-upload>
+
+      <mat-hint>PNG or SVG only • Maximum 1 MB</mat-hint>
+
+      @if (
+        form.get("logo")?.hasError("required") && form.get("logo")?.touched
+      ) {
+        <mat-error>Badge icon is required.</mat-error>
+      }
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="cancel()" [disabled]="loading">
+    Cancel
+  </button>
+  <button
+    mat-flat-button
+    color="primary"
+    type="button"
+    (click)="submit()"
+    [disabled]="form.invalid || loading"
+  >
+    @if (loading) {
+      <mat-spinner diameter="20"></mat-spinner>
+    } @else {
+      {{ actionLabel }}
+    }
+  </button>
+</mat-dialog-actions>

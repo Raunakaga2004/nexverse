@@ -1,0 +1,17 @@
+.full-width {
+  width: 100%;
+}
+ 
+mat-dialog-content {
+  min-width: 450px;
+  padding-top: .5rem;
+ 
+  p {
+    margin-bottom: 1rem;
+    color: #6b7280;
+  }
+}
+ 
+textarea {
+  resize: vertical;
+}

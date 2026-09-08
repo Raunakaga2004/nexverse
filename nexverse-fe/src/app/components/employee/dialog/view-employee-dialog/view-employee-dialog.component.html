@@ -1,0 +1,101 @@
+<div class="dialog-content">
+  <div class="employee-header">
+    <div class="avatar">
+      @if (employee.profileImageUrl) {
+        <img [src]="profileImageUrl" alt="Profile Image" class="profile-image"/>
+      } @else {
+          {{ initials }}
+      }
+    </div>
+    <div class="employee-summary">
+      <div class="heading">
+        <h3>{{ fullName }}</h3>
+        <mat-chip [ngClass]="employee.status.toLowerCase()">
+          {{ employee.status }}
+        </mat-chip>
+      </div>
+    </div>
+  </div>
+  <mat-divider></mat-divider>
+  <div class="emp-details">
+    <section class="details-section">
+      <h3>Employee Information</h3>
+
+      <div class="details-grid">
+        <div class="detail-item">
+          <span class="detail-label">First Name</span>
+          <span class="detail-value">
+            {{ employee.firstName }}
+          </span>
+        </div>
+
+        <div class="detail-item">
+          <span class="detail-label">Last Name</span>
+          <span class="detail-value">
+            {{ employee.lastName ?? '-' }}
+          </span>
+        </div>
+
+        <div class="detail-item">
+          <span class="detail-label">Email</span>
+          <span class="detail-value">
+            {{ employee.email | lowercase}}
+          </span>
+        </div>
+
+        <div class="detail-item">
+          <span class="detail-label"> Phone Number </span>
+          <span class="detail-value">
+            {{ employee.phoneNumber ?? '-' }}
+          </span>
+        </div>
+
+        <div class="detail-item">
+          <span class="detail-label"> Employee Code </span>
+          <span class="detail-value">
+            {{ employee.employeeCode ?? '-' }}
+          </span>
+        </div>
+
+        <div class="detail-item">
+          <span class="detail-label"> Job Title </span>
+          <span class="detail-value">
+            {{ employee.jobTitle ?? '-' }}
+          </span>
+        </div>
+
+        <div class="detail-item">
+          <span class="detail-label"> Department </span>
+          <span class="detail-value">
+            {{ employee.departmentName }}
+          </span>
+        </div>
+
+        <div class="detail-item">
+          <span class="detail-label"> Role</span>
+          <span class="detail-value">
+            {{ employee.role | titlecase }}
+          </span>
+        </div>
+
+        <div class="detail-item">
+          <span class="detail-label">Created At</span>
+          <span class="detail-value">
+            {{ employee.createdAt | date: "dd MMM yyyy, hh:mm a" }}
+          </span>
+        </div>
+
+        <div class="detail-item">
+          <span class="detail-label">Updated At</span>
+          <span class="detail-value">
+            {{ employee.updatedAt | date: "dd MMM yyyy, hh:mm a" }}
+          </span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="close-button">
+    <button mat-flat-button mat-dialog-close>Close</button>
+  </div>
+</div>

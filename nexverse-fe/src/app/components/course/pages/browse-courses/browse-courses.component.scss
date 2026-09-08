@@ -1,0 +1,180 @@
+.browse-courses-page {
+  display: flex;
+  flex-direction: column;
+  //   gap: 1.5rem;
+}
+
+mat-divider {
+  margin-bottom: 24px;
+}
+
+.thumbnail-image {
+  height: 180px; 
+}
+
+.page-header {
+  p {
+    margin-top: 0.4rem;
+    color: #6b7280;
+    font-size: 0.95rem;
+  }
+}
+
+.toolbar {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.course-card {
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+  }
+}
+
+.thumbnail {
+  height: 180px;
+  background: #f3f4f6;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  mat-icon {
+    font-size: 60px;
+    width: 60px;
+    height: 60px;
+    color: #bdbdbd;
+  }
+}
+
+.course-card mat-card-content {
+  padding: 1.25rem;
+}
+
+.course-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+
+  h3 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.4;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  mat-chip {
+    flex-shrink: 0;
+  }
+}
+
+.description {
+  margin: 1rem 0;
+  color: #6b7280;
+  font-size: 0.9rem;
+  line-height: 1.5;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.course-level {
+  color: #4b5563;
+}
+
+.course-info {
+  display: flex;
+  flex-direction: row;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+  justify-content: space-between;
+
+  span {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #4b5563;
+    font-size: 0.9rem;
+  }
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    color: #9ca3af;
+  }
+}
+
+.skill-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+
+  mat-chip {
+    font-size: 0.75rem;
+  }
+}
+
+.empty-state {
+  min-height: 280px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  color: #9e9e9e;
+  text-align: center;
+
+  mat-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    margin-bottom: 1rem;
+  }
+
+  h3 {
+    margin: 0 0 0.5rem;
+    font-weight: 600;
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.9rem;
+  }
+}
+
+mat-paginator {
+  margin-top: 0.5rem;
+  background: transparent;
+}
+
+.search-field {
+  padding: 0;
+}
+
+mat-label{
+  padding: 0;
+}

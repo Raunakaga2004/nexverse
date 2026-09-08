@@ -1,0 +1,140 @@
+@if (loading) {
+  <div class="loading-container">
+    <mat-spinner diameter="50"></mat-spinner>
+  </div>
+} @else {
+  <div class="dashboard-content-page dashboard">
+    <section class="metrics-grid">
+      <mat-card class="metric-card">
+        <mat-card-content>
+          <span class="metric-label"> Employees </span>
+          <h2>{{ dashboardData.metrics.totalEmployees }}</h2>
+        </mat-card-content>
+      </mat-card>
+      <mat-card class="metric-card">
+        <mat-card-content>
+          <span class="metric-label"> Departments </span>
+          <h2>{{ dashboardData.metrics.totalDepartments }}</h2>
+        </mat-card-content>
+      </mat-card>
+      <mat-card class="metric-card">
+        <mat-card-content>
+          <span class="metric-label"> Skills </span>
+          <h2>
+            {{ dashboardData.metrics.totalSkills }}
+          </h2>
+        </mat-card-content>
+      </mat-card>
+      <mat-card class="metric-card">
+        <mat-card-content>
+          <span class="metric-label"> Courses </span>
+          <h2>
+            {{ dashboardData.metrics.totalCourses }}
+          </h2>
+        </mat-card-content>
+      </mat-card>
+      <mat-card class="metric-card">
+        <mat-card-content>
+          <span class="metric-label"> Storage Used </span>
+          <div>
+            <h3>
+              {{ dashboardData.storage.usedStorage | fileSize }}
+              /
+              {{ dashboardData.storage.totalStorage | fileSize }}
+            </h3>
+            <div class="storage-footer">
+              {{
+                (100 * dashboardData.storage.usedStorage) /
+                  dashboardData.storage.totalStorage | number: "1.0-0"
+              }}% Used
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </section>
+    <section>
+      <mat-card class="chart-card">
+        <div class="page-header">
+          <h2>Organization Growth</h2>
+          <mat-button-toggle-group
+            [value]="selectedPeriod"
+            (change)="onPeriodChange($event.value)"
+          >
+            <mat-button-toggle value="LAST_12_MONTHS"
+              >12 Months</mat-button-toggle
+            >
+            <mat-button-toggle value="LAST_3_YEARS">3 Years</mat-button-toggle>
+            <mat-button-toggle value="LAST_5_YEARS">5 Years</mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+        <mat-divider></mat-divider>
+        <mat-card-content>
+          <app-growth-chart
+            [growth]="dashboardData.growth"
+            [period]="selectedPeriod"
+            [series]="growthSeries"
+          ></app-growth-chart>
+        </mat-card-content>
+      </mat-card>
+    </section>
+    <!-- <section class="dashboard-grid"> -->
+    <!-- <mat-card>
+        <mat-card-header>
+          <mat-card-title> Department Distribution </mat-card-title>
+        </mat-card-header>
+        <mat-divider></mat-divider>
+        <mat-card-content class="department-distribution">
+          @for (
+            department of dashboardData.departmentDistribution;
+            track department.departmentId
+          ) {
+            <div class="distribution-row">
+              <div class="distribution-header">
+                <span>{{ department.departmentName }}</span>
+                <span>{{ department.employeeCount }}</span>
+              </div>
+              <mat-progress-bar
+                mode="determinate"
+                [value]="
+                  (department.employeeCount /
+                    dashboardData.metrics.totalEmployees) *
+                  100
+                "
+              >
+              </mat-progress-bar>
+            </div>
+          }
+        </mat-card-content>
+      </mat-card> -->
+    <!-- <mat-card class="storage-used-card">
+        <mat-card-header>
+          <mat-card-title> <h2>Storage Usage</h2> </mat-card-title>
+        </mat-card-header>
+        <mat-divider></mat-divider>
+        <mat-card-content>
+          <h3>
+            {{ dashboardData.storage.usedStorage | fileSize }}
+            /
+            {{ dashboardData.storage.totalStorage | fileSize }}
+          </h3>
+
+          <mat-progress-bar
+            mode="determinate"
+            [value]="
+              (100 * dashboardData.storage.usedStorage) /
+              dashboardData.storage.totalStorage
+            "
+          >
+          </mat-progress-bar>
+
+          <div class="storage-footer">
+            {{
+              (100 * dashboardData.storage.usedStorage) /
+                dashboardData.storage.totalStorage | number: "1.0-0"
+            }}% Used
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </section> -->
+  </div>
+}

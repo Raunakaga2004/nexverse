@@ -1,0 +1,98 @@
+<h2 mat-dialog-title>{{ title }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="employee-form">
+    <mat-form-field appearance="outline">
+      <mat-label>First Name</mat-label>
+      <input matInput formControlName="firstName" />
+      @if (form.controls.firstName.hasError("required")) {
+        <mat-error>First name is required.</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Last Name</mat-label>
+      <input matInput formControlName="lastName" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" />
+      @if (form.controls.email.hasError("required")) {
+        <mat-error>Email is required.</mat-error>
+      }
+      @if (form.controls.email.hasError("email")) {
+        <mat-error>Enter a valid email.</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Phone Number</mat-label>
+      <input matInput formControlName="phoneNumber" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Employee Code</mat-label>
+      <input matInput formControlName="employeeCode" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Job Title</mat-label>
+      <input matInput formControlName="jobTitle" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Department</mat-label>
+
+      <mat-select
+        formControlName="departmentName"
+        (openedChange)="onDepartmentOpened($event)"
+      >
+        <mat-option>
+          <ngx-mat-select-search
+            [formControl]="departmentSearchControl"
+            placeholderLabel="Search"
+            noEntriesFoundLabel="No departments found"
+          >
+          </ngx-mat-select-search>
+        </mat-option>
+
+        @for (department of departments; track department.id) {
+          <mat-option [value]="department.name" class="department-options">
+            {{ department.name }}
+          </mat-option>
+        }
+
+        @if (loadingDepartments) {
+          <mat-option disabled>
+            <div class="loading-option">
+              <mat-spinner diameter="18"></mat-spinner>
+              Loading...
+            </div>
+          </mat-option>
+        }
+      </mat-select>
+
+      @if (form.controls.departmentName.hasError("required")) {
+        <mat-error> Department is required. </mat-error>
+      }
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()" [disabled]="loading">Cancel</button>
+
+  <button
+    mat-flat-button
+    color="primary"
+    [disabled]="form.invalid || loading"
+    (click)="submit()"
+  >
+    @if (loading) {
+      <mat-spinner diameter="18"></mat-spinner>
+    } @else {
+      {{ actionLabel }}
+    }
+  </button>
+</mat-dialog-actions>

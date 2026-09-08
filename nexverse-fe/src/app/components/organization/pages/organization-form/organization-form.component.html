@@ -1,0 +1,366 @@
+<div class="form-page">
+  <h2>
+    {{ isEdit ? "Edit Organization" : "Create Organization" }}
+  </h2>
+
+  <ng-template #organizationFormTemplate let-form="form">
+    <div [formGroup]="form">
+      <div class="section">
+        <div class="grid-container">
+          <div class="basic-details-form-fields">
+            <mat-form-field appearance="outline">
+              <mat-label>Name</mat-label>
+              <input matInput formControlName="name" />
+              <mat-hint align="end">
+                {{ organizationForm.controls["name"].value.length }}/100
+              </mat-hint>
+
+              @if (
+                organizationForm.get("name")?.hasError("required") &&
+                organizationForm.get("name")?.touched
+              ) {
+                <mat-error>Name is required.</mat-error>
+              } @else if (
+                (organizationForm.get("name")?.hasError("minlength") ||
+                  organizationForm.get("name")?.hasError("maxlength")) &&
+                organizationForm.get("name")?.touched
+              ) {
+                <mat-error>
+                  Name must be between 2 and 100 characters.
+                </mat-error>
+              }
+            </mat-form-field>
+
+            <div class="email-phone">
+              <mat-form-field appearance="outline">
+                <mat-label>Email</mat-label>
+                <input matInput type="email" formControlName="email" />
+
+                @if (
+                  organizationForm.get("email")?.hasError("required") &&
+                  organizationForm.get("email")?.touched
+                ) {
+                  <mat-error>Email is required.</mat-error>
+                } @else if (
+                  organizationForm.get("email")?.hasError("email") &&
+                  organizationForm.get("email")?.touched
+                ) {
+                  <mat-error>Enter a valid email address.</mat-error>
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Phone Number</mat-label>
+                <input matInput formControlName="phone" />
+
+                @if (
+                  organizationForm.get("phone")?.hasError("required") &&
+                  organizationForm.get("phone")?.touched
+                ) {
+                  <mat-error>Phone number is required.</mat-error>
+                } @else if (
+                  organizationForm.get("phone")?.hasError("pattern") &&
+                  organizationForm.get("phone")?.touched
+                ) {
+                  <mat-error>Enter a valid phone number.</mat-error>
+                }
+              </mat-form-field>
+            </div>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Address</mat-label>
+              <textarea matInput rows="2" formControlName="address"></textarea>
+
+              @if (
+                organizationForm.get("address")?.hasError("required") &&
+                organizationForm.get("address")?.touched
+              ) {
+                <mat-error>Address is required.</mat-error>
+              }
+            </mat-form-field>
+
+            <div class="locations-grid-fields">
+              <mat-form-field appearance="outline">
+                <mat-label>Country</mat-label>
+                <input matInput formControlName="country" />
+
+                @if (
+                  organizationForm.get("country")?.hasError("required") &&
+                  organizationForm.get("country")?.touched
+                ) {
+                  <mat-error>Country is required.</mat-error>
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>State</mat-label>
+                <input matInput formControlName="state" />
+
+                @if (
+                  organizationForm.get("state")?.hasError("required") &&
+                  organizationForm.get("state")?.touched
+                ) {
+                  <mat-error>State is required.</mat-error>
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>City</mat-label>
+                <input matInput formControlName="city" />
+
+                @if (
+                  organizationForm.get("city")?.hasError("required") &&
+                  organizationForm.get("city")?.touched
+                ) {
+                  <mat-error>City is required.</mat-error>
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Zip Code</mat-label>
+                <input matInput formControlName="zipCode" />
+
+                @if (
+                  organizationForm.get("zipCode")?.hasError("required") &&
+                  organizationForm.get("zipCode")?.touched
+                ) {
+                  <mat-error>Zip code is required.</mat-error>
+                }
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="upload-file">
+            <mat-label>
+              Upload Logo
+              <span class="required-asterisk">*</span>
+            </mat-label>
+
+            <app-file-upload
+              accept=""
+              label="Drag & Drop Logo Image"
+              hint="or click to browse"
+              (fileSelected)="onLogoSelected($event)"
+              [file]="logoFile"
+            >
+            </app-file-upload>
+
+            <mat-hint>PNG, JPG, JPEG or SVG only • Maximum 5 MB</mat-hint>
+
+            @if (
+              organizationForm.get("logo")?.hasError("required") &&
+              organizationForm.get("logo")?.touched
+            ) {
+              <mat-error>Logo is required.</mat-error>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+  @if (isEdit) {
+    <form [formGroup]="organizationForm" class="edit-form">
+      <ng-container
+        [ngTemplateOutlet]="organizationFormTemplate"
+        [ngTemplateOutletContext]="{ form: organizationForm }"
+      >
+      </ng-container>
+
+      <div class="actions">
+        <button mat-button routerLink="/dashboard/organizations" [disabled]="isSubmitting">Cancel</button>
+
+        <button
+          mat-flat-button
+          color="primary"
+          (click)="submit()"
+          [disabled]="organizationForm.invalid || isSubmitting"
+        >
+          @if (isSubmitting) {
+            <mat-spinner diameter="20"></mat-spinner>
+          } @else {
+            Update Organization
+          }
+        </button>
+      </div>
+    </form>
+  } @else {
+    <mat-stepper linear>
+      <mat-step [stepControl]="organizationForm">
+        <form [formGroup]="organizationForm">
+          <ng-template matStepLabel>
+            <div class="step-label">
+              <mat-icon>apartment</mat-icon>
+              Organization
+            </div>
+          </ng-template>
+
+          <ng-container
+            [ngTemplateOutlet]="organizationFormTemplate"
+            [ngTemplateOutletContext]="{ form: organizationForm }"
+          >
+          </ng-container>
+
+          <div class="actions">
+            <button mat-button routerLink="/dashboard/organizations">
+              Cancel
+            </button>
+
+            <button
+              mat-flat-button
+              color="primary"
+              matStepperNext
+              [disabled]="organizationForm.invalid"
+            >
+              Next
+            </button>
+          </div>
+        </form>
+      </mat-step>
+
+      <mat-step [stepControl]="adminForm">
+        <form [formGroup]="adminForm">
+          <ng-template matStepLabel>
+            <div class="step-label">
+              <mat-icon>person</mat-icon>
+              Admin
+            </div>
+          </ng-template>
+          <div class="admin-form-detail-form-layout">
+            <div class="section">
+              <div class="grid-container">
+                <div class="admin-form-fields">
+                  <mat-form-field appearance="outline">
+                    <mat-label>First Name</mat-label>
+                    <input matInput formControlName="firstName" />
+                    @if (
+                      adminForm.get("firstName")?.hasError("required") &&
+                      adminForm.get("firstName")?.touched
+                    ) {
+                      <mat-error> First name is required. </mat-error>
+                    }
+                  </mat-form-field>
+                  <mat-form-field appearance="outline">
+                    <mat-label>Last Name</mat-label>
+                    <input matInput formControlName="lastName" />
+                  </mat-form-field>
+                  <mat-form-field appearance="outline">
+                    <mat-label>Email</mat-label>
+                    <input matInput type="email" formControlName="email" />
+                    @if (
+                      adminForm.get("email")?.hasError("required") &&
+                      adminForm.get("email")?.touched
+                    ) {
+                      <mat-error> Email is required. </mat-error>
+                    } @else if (
+                      adminForm.get("email")?.hasError("email") &&
+                      adminForm.get("email")?.touched
+                    ) {
+                      <mat-error> Enter a valid email address. </mat-error>
+                    }
+                  </mat-form-field>
+                  <mat-form-field appearance="outline">
+                    <mat-label>Phone Number</mat-label>
+                    <input matInput formControlName="phone" />
+                    @if (
+                      adminForm.get("phone")?.hasError("required") &&
+                      adminForm.get("phone")?.touched
+                    ) {
+                      <mat-error> Phone number is required. </mat-error>
+                    } @else if (
+                      adminForm.get("phone")?.hasError("pattern") &&
+                      adminForm.get("phone")?.touched
+                    ) {
+                      <mat-error> Enter a valid phone number. </mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+                <mat-card class="info-card">
+                  <div class="info-card-content">
+                    <mat-card-title>
+                      <mat-icon>info_outline</mat-icon>
+                      Account Invitation
+                    </mat-card-title>
+                    <mat-card-content>
+                      <p>
+                        An invitation email will be sent to the administrator at
+                        <strong>{{
+                          adminForm.get("email")?.value === ""
+                            ? "admin email"
+                            : adminForm.get("email")?.value
+                        }}</strong
+                        >.
+                      </p>
+                      <p>
+                        They will be able to set their password and login after that.
+                      </p>
+                    </mat-card-content>
+                  </div>
+                </mat-card>
+              </div>
+              <mat-divider></mat-divider>
+              <section class="summary-card">
+                <div class="section-heading">
+                  <div class="section-heading__icon">
+                    <mat-icon>apartment</mat-icon>
+                  </div>
+
+                  <div>
+                    <h3>Organization Summary</h3>
+                    <p>Review the organization details before creating it.</p>
+                  </div>
+                </div>
+
+                <div class="summary-grid">
+                  <div class="summary-item">
+                    <span class="summary-item__label">Organization Name</span>
+                    <span class="summary-item__value">
+                      {{ organizationForm.get("name")?.value || "—" }}
+                    </span>
+                  </div>
+
+                  <div class="summary-item">
+                    <span class="summary-item__label">Email</span>
+                    <span class="summary-item__value">
+                      {{ organizationForm.get("email")?.value || "—" }}
+                    </span>
+                  </div>
+
+                  <div class="summary-item">
+                    <span class="summary-item__label">Phone</span>
+                    <span class="summary-item__value">
+                      {{ organizationForm.get("phone")?.value || "—" }}
+                    </span>
+                  </div>
+
+                  <div class="summary-item">
+                    <span class="summary-item__label">Location</span>
+                    <span class="summary-item__value location-preview">
+                      {{ getOrganizationLocation() || "-" }}
+                    </span>
+                  </div>
+                </div>
+              </section>
+            </div>
+
+            <div class="final-actions">
+              <button mat-button matStepperPrevious [disabled]="isSubmitting">Back</button>
+              <button
+                mat-flat-button
+                color="primary"
+                (click)="submit()"
+                [disabled]="adminForm.invalid || isSubmitting"
+              >
+                @if (isSubmitting) {
+                  <mat-spinner diameter="20"></mat-spinner>
+                } @else {
+                  {{ "Create" }}
+                }
+              </button>
+            </div>
+          </div>
+        </form>
+      </mat-step>
+    </mat-stepper>
+  }
+</div>

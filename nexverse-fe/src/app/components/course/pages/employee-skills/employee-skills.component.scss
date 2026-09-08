@@ -1,0 +1,194 @@
+.page-header {
+  p {
+    margin-top: 0.4rem;
+    color: #6b7280;
+    font-size: 0.95rem;
+  }
+}
+
+mat-divider {
+  margin-bottom: 24px;
+}
+
+.filters {
+  display: flex;
+  gap: 20px;
+  // margin-bottom: 32px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.level-field {
+  width: 220px;
+}
+
+.loading-state {
+  display: flex;
+  justify-content: center;
+  padding: 80px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 100px 20px;
+  color: #9ca3af;
+
+  mat-icon {
+    font-size: 70px;
+    width: 70px;
+    height: 70px;
+    margin-bottom: 18px;
+  }
+
+  h2 {
+    margin: 0;
+    color: #374151;
+  }
+
+  p {
+    margin-top: 8px;
+  }
+}
+
+.skills-grid {
+  display: grid;
+
+  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+
+  gap: 24px;
+}
+
+.skill-card {
+  padding: 22px;
+
+  border-radius: 18px;
+
+  transition: 0.25s;
+
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-4px);
+
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  }
+}
+
+.skill-header {
+  display: flex;
+
+  gap: 18px;
+
+  align-items: center;
+
+  margin-bottom: 18px;
+}
+
+.skill-icon {
+  width: 64px;
+  height: 64px;
+
+  border-radius: 50%;
+
+  background: #eef2ff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  mat-icon {
+    color: var(--color-primary);
+
+    font-size: 34px;
+
+    width: 34px;
+
+    height: 34px;
+  }
+}
+
+.skill-info {
+  flex: 1;
+
+  h3 {
+    margin: 0;
+
+    font-size: 1.15rem;
+
+    font-weight: 600;
+  }
+
+  .total {
+    display: inline-block;
+
+    margin-top: 6px;
+
+    color: #6b7280;
+
+    font-size: 0.9rem;
+  }
+}
+
+.levels {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 14px;
+
+  margin-top: 20px;
+}
+
+.level-row {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  padding: 10px 0;
+}
+
+.level-name {
+  font-weight: 500;
+}
+
+.badge {
+  min-width: 38px;
+
+  text-align: center;
+
+  padding: 4px 12px;
+
+  border-radius: 999px;
+
+  background: var(--color-primary);
+
+  color: white;
+
+  font-size: 0.85rem;
+
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .skills-page {
+    padding: 20px;
+  }
+
+  .filters {
+    flex-direction: column;
+
+    align-items: stretch;
+  }
+
+  .search-field,
+  .level-field {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .skills-grid {
+    grid-template-columns: 1fr;
+  }
+}

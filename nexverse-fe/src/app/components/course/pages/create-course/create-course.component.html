@@ -1,0 +1,188 @@
+<form class="page" [formGroup]="courseForm">
+  <div class="page-header">
+    <h2>
+      {{ isEditMode ? "Edit Course" : "Create Course" }}
+    </h2>
+
+    <div class="actions">
+      <button mat-button type="button" (click)="cancel()">
+        Cancel
+      </button>
+
+      <button mat-flat-button color="primary" type="button" (click)="save()">
+        {{ isEditMode ? "Save Changes" : "Save" }}
+      </button>
+    </div>
+  </div>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title> Basic Information </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <mat-form-field appearance="outline">
+        <mat-label>Course Title</mat-label>
+
+        <input matInput formControlName="title" />
+
+        @if (courseForm.get("title")?.hasError("required")) {
+          <mat-error> Course title is required. </mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Short Description</mat-label>
+
+        <textarea matInput rows="3" formControlName="shortDescription">
+        </textarea>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Description</mat-label>
+
+        <textarea matInput rows="8" formControlName="description"> </textarea>
+      </mat-form-field>
+    </mat-card-content>
+  </mat-card>
+  <div class="course-config-and-skills">
+    <mat-card class="course-config-section">
+      <mat-card-header>
+        <mat-card-title> Course Configuration </mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="grid">
+        <mat-form-field appearance="outline" class="skill-level-form-field">
+          <mat-label>Level</mat-label>
+          <mat-select formControlName="level" class="skill-level-options">
+            @for (level of levelOptions; track level) {
+              <mat-option [value]="level"> {{ level | titlecase }} </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Visibility</mat-label>
+          <mat-select formControlName="visibility">
+            @for (visibility of visibilityOptions; track visibility) {
+              <mat-option [value]="visibility">
+                {{ visibility | titlecase }}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Access Type</mat-label>
+          <mat-select formControlName="accessType">
+            @for (
+              courseAccessType of courseAccessTypeOptions;
+              track courseAccessType
+            ) {
+              <mat-option [value]="courseAccessType">
+                @if (courseAccessType === "REQUEST_REQUIRED") {
+                  Request Required
+                } @else {
+                  {{ courseAccessType | titlecase }}
+                }
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="course-skill-section">
+      <mat-card-header>
+        <mat-card-title> Skills </mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="skill-selector">
+          <mat-form-field appearance="outline">
+            <mat-label>Skill</mat-label>
+
+            <mat-select
+              #skillSelect
+              [value]="selectedSkill"
+              (selectionChange)="addSkill($event.value)"
+              (openedChange)="onSkillOpened($event)"
+            >
+              <mat-option>
+                <ngx-mat-select-search
+                  [formControl]="skillSearchControl"
+                  placeholderLabel="Search Skill"
+                  noEntriesFoundLabel="No skills found"
+                >
+                </ngx-mat-select-search>
+              </mat-option>
+
+              @for (skill of skills; track skill.id) {
+                <mat-option
+                  [value]="skill"
+                  [disabled]="containsSkill(skill.id)"
+                >
+                  {{ skill.name }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+      @if (selectedSkills.length > 0) {
+        <mat-divider></mat-divider>
+        <div class="skill-table-wrapper">
+          <table
+            mat-table
+            [dataSource]="selectedSkills"
+          >
+            <ng-container matColumnDef="skill" >
+              <th mat-header-cell *matHeaderCellDef>Skill</th>
+              <td mat-cell *matCellDef="let skill" class="skill-name">
+                {{ skill.skill.name }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="level">
+              <th mat-header-cell *matHeaderCellDef>Level</th>
+              <td mat-cell *matCellDef="let skill">
+                <mat-form-field appearance="outline" subscriptSizing="dynamic" class="level-field">
+                  <mat-select [(value)]="skill.skillLevel">
+                    <mat-option value="BEGINNER">Beginner</mat-option>
+                    <mat-option value="INTERMEDIATE">Intermediate</mat-option>
+                    <mat-option value="ADVANCED">Advanced</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="action">
+              <th mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let skill">
+                <button
+                  mat-icon-button
+                  color="warn"
+                  (click)="removeSkill(skill.skill.id)"
+                >
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          </table>
+          <mat-divider></mat-divider>
+        </div>
+        <div class="spacer"></div>
+      }
+    </mat-card>
+  </div>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title> Thumbnail </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <app-file-upload
+        accept="image/*"
+        label="Upload Course Thumbnail"
+        hint="Drag & Drop or Click to Browse"
+        (fileSelected)="onThumbnailSelected($event)",
+        [file]="thumbnail"
+      >
+      </app-file-upload>
+    </mat-card-content>
+  </mat-card>
+</form>

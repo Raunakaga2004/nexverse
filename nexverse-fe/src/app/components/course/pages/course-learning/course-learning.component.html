@@ -1,0 +1,159 @@
+@if (course) {
+  <div class="learning-page">
+    <header class="learning-header">
+      <div class="course-brand">
+        <img
+          class="organization-logo"
+          [src]="companyLogoUrl"
+          routerLink="/dashboard"
+        />
+        <div class="divider"></div>
+        <div class="course-details">
+          <h2>{{ course.title }}</h2>
+          <div class="course-progress">
+            <span>{{ course.progressPercent | number: "1.0-0" }}%</span>
+            <mat-progress-bar
+              class="progress-bar"
+              mode="determinate"
+              [value]="course.progressPercent"
+            >
+            </mat-progress-bar>
+          </div>
+        </div>
+      </div>
+    </header>
+    <div class="learning-layout">
+      <section class="content-panel">
+        <div class="content-toolbar">
+          <button class="back-btn" (click)="back()">
+            <mat-icon>arrow_back</mat-icon>
+          </button>
+          <div class="content-title">
+            {{ selectedContent?.title }}
+          </div>
+          <div class="toolbar-actions">
+            <button
+              class="btn btn-outline"
+              (click)="previous()"
+              [disabled]="!selectedContent?.previousContentId"
+            >
+              Previous
+            </button>
+            <button
+              mat-flat-button
+              (click)="markComplete()"
+              [disabled]="selectedContent?.progress === 'COMPLETED'"
+            >
+              Mark Complete
+            </button>
+            <button
+              class="btn btn-outline"
+              (click)="next()"
+              [disabled]="!selectedContent?.nextContentId"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+        <div class="content-viewer">
+          @if (selectedContent?.contentType === "VIDEO") {
+            <video
+              class="video-player"
+              controls
+              controlsList="nodownload noremoteplayback"
+              disablePictureInPicture
+              [src]="videoUrl"
+              preload="metadata"
+            ></video>
+          }
+
+          @if (selectedContent?.contentType === "DOCUMENT") {
+            <iframe [src]="documentUrl" width="100%" height="100%"> </iframe>
+          }
+
+          @if (selectedContent?.contentType === "TEXT") {
+            <div class="text-content">
+              <h2>{{ selectedContent!.title }}</h2>
+
+              <div
+                class="content-body"
+                [innerHTML]="selectedContent!.description"
+              ></div>
+            </div>
+          }
+        </div>
+      </section>
+
+      <aside class="sidebar">
+        @for (module of course.modules; track module.id) {
+          <div class="module">
+            <div class="module-header" (click)="toggleModule(module)">
+              <div>
+                <div class="module-title">
+                  {{ module.title }}
+                </div>
+
+                <small>
+                  {{ module.completedContents }}/{{ module.totalContents }}
+                  completed
+                </small>
+              </div>
+
+              <mat-icon>
+                {{ isExpanded(module.id) ? "expand_less" : "expand_more" }}
+              </mat-icon>
+            </div>
+
+            @if (isExpanded(module.id)) {
+              <div class="module-contents">
+                @for (content of module.contents; track content.id) {
+                  <div
+                    class="content-item"
+                    [class.active]="isSelected(content)"
+                    (click)="openContent(content.id)"
+                  >
+                    <div class="content-info">
+                      <div class="content-title">
+                        {{ content.title }}
+                      </div>
+
+                      <div class="content-meta">
+                        <mat-icon>
+                          @switch (content.contentType) {
+                            @case ("VIDEO") {
+                              play_circle
+                            }
+
+                            @case ("DOCUMENT") {
+                              description
+                            }
+
+                            @default {
+                              article
+                            }
+                          }
+                        </mat-icon>
+
+                        <span>
+                          {{ content.estimatedDurationSeconds | duration }}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="status">
+                      @if (content.completed) {
+                        <mat-icon class="completed"> check_circle </mat-icon>
+                      } @else {
+                        <mat-icon> radio_button_unchecked </mat-icon>
+                      }
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        }
+      </aside>
+    </div>
+  </div>
+}

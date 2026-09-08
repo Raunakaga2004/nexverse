@@ -1,0 +1,30 @@
+<h2 mat-dialog-title>Request Course Access</h2>
+
+<mat-dialog-content>
+  <p>This course requires approval before enrollment.</p>
+
+  <form [formGroup]="form">
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label> Reason (optional) </mat-label>
+
+    <textarea
+      matInput
+      rows="5"
+      maxlength="500"
+      formControlName="reason"
+      [formGroup]="form"
+    >
+    </textarea>
+
+    <mat-hint align="end"> {{ form.value.reason?.length || 0 }}/500 </mat-hint>
+  </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">Cancel</button>
+
+  <button mat-flat-button color="primary" (click)="submit()">
+    Submit Request
+  </button>
+</mat-dialog-actions>

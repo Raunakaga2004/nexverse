@@ -1,0 +1,13 @@
+.navbar-logo {
+  img {
+    display: block;
+    width: auto;
+    object-fit: contain;
+  }
+  text-decoration: none;
+  font-size: 1.2rem;
+  font-weight: 200;
+  color: var(--color-text-primary);
+  letter-spacing: -2px;
+  width: fit-content;
+}

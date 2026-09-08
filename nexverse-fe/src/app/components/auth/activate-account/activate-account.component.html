@@ -1,0 +1,10 @@
+<app-set-password
+  title="Activate Your Account"
+  buttonText="Activate Account"
+  [isSubmitting]="isSubmitting"
+  [errorMessage]="errorMessage"
+  (passwordSubmitted)="activateAccount($event)"
+  [passwordSetted]="accountActivated"
+  [passwordSettedMessage]="accountActivatedMessage"
+>
+</app-set-password>

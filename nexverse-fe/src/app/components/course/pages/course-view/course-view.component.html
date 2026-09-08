@@ -1,0 +1,241 @@
+@if (!loading && course) {
+  <div class="dashboard-content-page course-view-page">
+    <div class="breadcrumb">
+      <a routerLink="/dashboard/browse-courses"> Browse Courses </a>
+
+      <mat-icon>chevron_right</mat-icon>
+
+      <span>{{ course.title }}</span>
+    </div>
+
+    <div class="course-layout">
+
+      <div class="course-main">
+        <mat-card class="hero-card">
+          <div class="hero">
+            <div class="hero-image">
+              <img
+                [src]="thumbnailUrl"
+                [alt]="course.title"
+              />
+            </div>
+
+            <div class="hero-content">
+              <h1>{{ course.title }}</h1>
+
+              <div class="hero-meta">
+                <span class="badge">
+                  {{ course.level }}
+                </span>
+
+                <span>•</span>
+
+                <span>
+                   {{course.estimatedDurationSeconds | duration}}
+                </span>
+              </div>
+
+              <p>
+                {{ course.shortDescription }}
+              </p>
+            </div>
+          </div>
+        </mat-card>
+
+        <mat-card class="stats-card">
+          <div class="stat">
+            <mat-icon>menu_book</mat-icon>
+
+            <div>
+              <label>Modules</label>
+
+              <strong>
+                {{ course.totalModules }}
+              </strong>
+            </div>
+          </div>
+
+          <div class="stat">
+            <mat-icon>schedule</mat-icon>
+
+            <div>
+              <label>Duration</label>
+
+              <strong>
+                {{ course.estimatedDurationSeconds | duration }}
+              </strong>
+            </div>
+          </div>
+
+          <div class="stat">
+            <mat-icon>article</mat-icon>
+
+            <div>
+              <label>Contents</label>
+
+              <strong>
+                {{ course.totalContents }}
+              </strong>
+            </div>
+          </div>
+        </mat-card>
+
+        <mat-divider></mat-divider>
+
+        <div class="section-card">
+          <h2>About this course</h2>
+
+          <p>
+            {{ course.description }}
+          </p>
+
+          @if (course.skills.length) {
+            <h3>Skills you will gain</h3>
+
+            <mat-chip-set>
+              @for (skill of course.skills; track skill.id) {
+                <mat-chip>
+                  {{ skill.skill.name }}
+                </mat-chip>
+              }
+            </mat-chip-set>
+          }
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="section-card">
+          <h2>Course Curriculum</h2>
+
+          <mat-accordion multi>
+            @for (module of course.modules; track module.id) {
+              <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    {{ module.title }}
+                  </mat-panel-title>
+
+                  <mat-panel-description>
+                    {{
+                      module.estimatedDurationSeconds | duration
+                    }}
+  
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+
+                <mat-list>
+                  @for (content of module.contents; track content.id) {
+                    <mat-list-item>
+                      <mat-icon matListItemIcon>
+                        {{
+                          content.contentType === "VIDEO"
+                            ? "play_circle"
+                            : content.contentType === "DOCUMENT"
+                              ? "description"
+                              : "article"
+                        }}
+                      </mat-icon>
+
+                      <div matListItemTitle>
+                        {{ content.title }}
+                      </div>
+
+                      <div matListItemLine>
+                        {{ content.estimatedDurationSeconds | duration }}
+                      </div>
+                    </mat-list-item>
+                  }
+                </mat-list>
+              </mat-expansion-panel>
+            }
+          </mat-accordion>
+        </div>
+      </div>
+
+      <!-- Right Sidebar -->
+
+      <div class="course-sidebar">
+        <mat-card class="sidebar-card">
+  
+          <button
+            mat-flat-button
+            color="primary"
+            class="full-width"
+            [disabled]="disableActionButton"
+            (click)="onAction()"
+          >
+            {{ actionLabel }}
+          </button>
+
+          <mat-divider></mat-divider>
+
+          <div class="sidebar-info">
+            <div class="item">
+              <mat-icon>school</mat-icon>
+
+              <span>Level</span>
+
+              <strong>
+                {{ course.level }}
+              </strong>
+            </div>
+
+            <div class="item">
+              <mat-icon>schedule</mat-icon>
+
+              <span>Duration</span>
+
+              <strong>
+                {{ course.estimatedDurationSeconds | duration }}
+              </strong>
+            </div>
+
+            <div class="item">
+              <mat-icon>menu_book</mat-icon>
+
+              <span>Modules</span>
+
+              <strong>
+                {{ course.totalModules }}
+              </strong>
+            </div>
+
+            <div class="item">
+              <mat-icon>visibility</mat-icon>
+
+              <span>Visibility</span>
+
+              <strong>
+                {{ course.visibility }}
+              </strong>
+            </div>
+
+            <div class="item">
+              <mat-icon>person</mat-icon>
+
+              <span>Created By</span>
+
+              <strong>
+                {{ course.publisherName }}
+              </strong>
+            </div>
+
+            <div class="item">
+              <mat-icon>calendar_today</mat-icon>
+
+              <span>Published On</span>
+
+              <strong>
+                {{ course.publishedAt | date }}
+              </strong>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+} @else {
+  <div class="loading-container">
+    <mat-spinner diameter="48"></mat-spinner>
+  </div>
+}

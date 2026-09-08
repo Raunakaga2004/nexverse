@@ -1,0 +1,16 @@
+<header class="landing-navbar">
+  <div class="navbar-container">
+    <app-platform-logo routerLink="/" />
+    <nav class="navbar-links">
+      @for (navigation of navigations; track $index) {
+        <a [routerLink]="navigation.route">
+          {{ navigation.label }}
+        </a>
+      }
+    </nav>
+    <div class="navbar-actions">
+      <button mat-stroked-button routerLink="/login">Login</button>
+      <button mat-flat-button>Get Started</button>
+    </div>
+  </div>
+</header>

@@ -1,0 +1,39 @@
+<div
+  class="upload-container"
+  [class.dragging]="isDragging"
+  (dragover)="onDragOver($event)"
+  (dragleave)="onDragLeave($event)"
+  (drop)="onDrop($event)"
+>
+  @if (!file) {
+    <label class="upload-content">
+      <input hidden type="file" [accept]="accept" (change)="browse($event)" />
+      <mat-icon class="upload-icon"> cloud_upload </mat-icon>
+      <h3>{{ label }}</h3>
+      <p>{{ hint }}</p>
+    </label>
+  } @else {
+    <div class="selected-file">
+      <div class="file-info">
+        @if (imagePreview) {
+          <img [src]="imagePreview" [alt]="file.name" class="image-preview" />
+        } @else {
+          <mat-icon color="primary"> description </mat-icon>
+        }
+        <div>
+          <div class="file-name">
+            {{ file.name }}
+          </div>
+
+          <div class="file-size">
+            {{ fileSize | fileSize }}
+          </div>
+        </div>
+      </div>
+
+      <button mat-icon-button color="warn" (click)="removeFile()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  }
+</div>

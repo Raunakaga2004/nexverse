@@ -1,0 +1,188 @@
+<div class="dashboard-content-page">
+  <div class="page-header">
+    <h2>Courses</h2>
+    @if (currentRole === "MANAGER") {
+      <button
+        mat-flat-button
+        color="primary"
+        routerLink="/dashboard/course/create"
+        class="create-course-button"
+      >
+        <mat-icon>add</mat-icon>
+        Create
+      </button>
+    }
+  </div>
+  <mat-card class="courses-card">
+    <div class="toolbar">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Search</mat-label>
+        <input matInput placeholder="" [formControl]="searchControl" />
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="record-state-field">
+        <mat-label>Status</mat-label>
+        <mat-select [formControl]="resourceCreationStatusControl">
+          @for (status of resourceCreationStatus; track status) {
+            <mat-option [value]="status">
+              {{ status | titlecase }}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="record-state-field">
+        <mat-label>Level</mat-label>
+        <mat-select [formControl]="levelControl">
+          @for (level of levelOptions; track $index) {
+            <mat-option [value]="level">{{ level | titlecase }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="record-state-field">
+        <mat-label>Visibility</mat-label>
+        <mat-select [formControl]="visibilityControl">
+          @for (visibility of visibilityOptions; track $index) {
+            <mat-option [value]="visibility">{{
+              visibility | titlecase
+            }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="record-state-field">
+        <mat-label>Access Type</mat-label>
+        <mat-select [formControl]="accessTypeControl">
+          @for (
+            courseAccessType of courseAccessTypeOptions;
+            track courseAccessType
+          ) {
+            <mat-option [value]="courseAccessType">
+              @if (courseAccessType === "REQUEST_REQUIRED") {
+                Request Required
+              } @else {
+                {{ courseAccessType | titlecase }}
+              }
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="table-wrapper">
+      @if (courses.length) {
+        <table mat-table [dataSource]="courses" class="courses-table">
+          @for (column of displayedColumns; track column) {
+            <ng-container [matColumnDef]="column">
+              @if (column === "actions") {
+                <th mat-header-cell *matHeaderCellDef>Actions</th>
+                <td mat-cell *matCellDef="let course">
+                  <button
+                    mat-icon-button
+                    [matMenuTriggerFor]="actionMenu"
+                    (click)="$event.stopPropagation()"
+                  >
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                  <mat-menu #actionMenu="matMenu">
+                    <button mat-menu-item (click)="viewCourse(course)">
+                      <mat-icon>visibility</mat-icon>
+                      <span>View</span>
+                    </button>
+                    @if (currentRole === "MANAGER") {
+                      @if (course.status === "DRAFT") {
+                        <button
+                          mat-menu-item
+                          (click)="deleteDraftCourse(course)"
+                        >
+                          <mat-icon>delete</mat-icon>
+                          <span>Delete</span>
+                        </button>
+                      }
+                      @if (course.status === "PUBLISHED" && course.hasAccess) {
+                        <button
+                          mat-menu-item
+                          (click)="openAssignCourseDialog(course)"
+                        >
+                          <mat-icon>assignment_ind</mat-icon>
+                          <span>Assign Course</span>
+                        </button>
+                      }
+                    }
+                  </mat-menu>
+                </td>
+              } @else {
+                <th mat-header-cell *matHeaderCellDef (click)="sort(column)">
+                  @switch (column) {
+                    @case ("phone") {
+                      Phone Number
+                    }
+                    @case ("courseManager") {
+                      Manager
+                    }
+                    @case ("zipCode") {
+                      Zip Code
+                    }
+                    @case ("createdAt") {
+                      Created At
+                    }
+                    @case ("updatedAt") {
+                      Updated At
+                    }
+                    @case ("accessType") {
+                      Access Type
+                    }
+                    @default {
+                      {{ column | titlecase }}
+                    }
+                  }
+                </th>
+                <td mat-cell *matCellDef="let course">
+                  @if (column === "createdAt") {
+                    {{ course.createdAt | date: "dd MMM yyyy" }}
+                  } @else if (column == "updatedAt") {
+                    {{ course.updatedAt | date: "dd MMM yyyy" }}
+                  } @else if (column == "department") {
+                    {{ course.owningDepartment }}
+                  } @else if (
+                    column == "accessType" &&
+                    course.accessType == "REQUEST_REQUIRED"
+                  ) {
+                    Request Required
+                  } @else {
+                    {{ course[column] | titlecase }}
+                  }
+                </td>
+              }
+            </ng-container>
+          }
+          view
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr
+            mat-row
+            *matRowDef="let row; columns: displayedColumns"
+            (click)="viewCourse(row)"
+          ></tr>
+        </table>
+        <mat-divider></mat-divider>
+      } @else {
+        <app-no-data
+          icon="school"
+          title="No Courses Found"
+          message="There are currently no courses to display."
+        >
+        </app-no-data>
+      }
+    </div>
+    @if (totalElements > 10) {
+      <mat-paginator
+        [length]="totalElements"
+        [pageIndex]="query.page - 1"
+        [pageSize]="query.size"
+        [pageSizeOptions]="[10, 20, 50]"
+        [showFirstLastButtons]="true"
+        (page)="pageChanged($event)"
+      >
+      </mat-paginator>
+    }
+    <div class="spacer"></div>
+  </mat-card>
+</div>

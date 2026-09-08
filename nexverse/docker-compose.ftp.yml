@@ -1,0 +1,40 @@
+services:
+  mysql:
+    image: mysql
+    container_name: nexverse-mysql
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-nexverse}
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  mailpit:
+    image: axllent/mailpit
+    container_name: nexverse-mailpit
+    restart: unless-stopped
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
+  ftp:
+    image: fauria/vsftpd
+    container_name: nexverse-ftp
+    restart: unless-stopped
+    ports:
+      - "21:21"
+      - "21100-21110:21100-21110"
+    environment:
+      FTP_USER: nexverse
+      FTP_PASS: 123.com
+      PASV_ADDRESS: 127.0.0.1
+      PASV_MIN_PORT: 21100
+      PASV_MAX_PORT: 21110
+    volumes:
+      - ftp-data:/home/vsftpd
+
+volumes:
+  ftp-data:
+  mysql-data:

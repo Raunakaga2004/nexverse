@@ -1,0 +1,54 @@
+mat-dialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  height: 100%;
+  overflow-y: hidden;
+  padding-top: 8px;
+}
+
+.description {
+  margin: 0;
+  color: rgb(97, 97, 97);
+  line-height: 1.5;
+}
+
+.template-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.template-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.template-info mat-icon {
+  color: var(--mat-sys-primary);
+}
+
+.title {
+  font-weight: 500;
+}
+
+.subtitle {
+  font-size: 13px;
+  color: rgb(117, 117, 117);
+}
+
+mat-dialog-actions {
+  padding: 16px 24px;
+}
+
+mat-spinner {
+  margin-right: 8px;
+}
+
+.import-employees-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}

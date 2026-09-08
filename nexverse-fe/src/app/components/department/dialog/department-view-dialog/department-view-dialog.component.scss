@@ -1,0 +1,29 @@
+:host {
+    display: block;
+}
+ 
+mat-dialog-content {
+    min-width: 450px;
+    padding-top: 8px;
+}
+ 
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--mat-sys-outline-variant);
+}
+ 
+.detail-row:last-child {
+    border-bottom: none;
+}
+ 
+.label {
+    font-weight: 600;
+    color: var(--mat-sys-on-surface-variant);
+}
+ 
+mat-dialog-actions {
+    padding: 16px 24px;
+}

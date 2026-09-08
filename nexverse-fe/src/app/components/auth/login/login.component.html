@@ -1,0 +1,71 @@
+<div class="login">
+  <section class="login-branding">
+    <app-platform-logo routerLink="/" />
+    <h1>Enterprise Learning Platform</h1>
+    <p>
+      Empower your workforce with learning management, employee development and
+      analytics.
+    </p>
+    <img src="images/hero-image.png" class="hero-image" />
+  </section>
+  <section class="login-form">
+    <mat-card>
+      <h2>Login</h2>
+      @if (errorMessage !== undefined) {
+        <mat-error class="invalid-error-message">{{ errorMessage }}</mat-error>
+      }
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input
+            matInput
+            type="email"
+            formControlName="email"
+            autocomplete="email"
+          />
+          @if (
+            email?.hasError("required") &&
+            email!.touched
+          ) {
+            <mat-error>Email is required.</mat-error>
+          }
+          @if (
+            email?.hasError("email") &&
+            email!.touched
+          ) {
+            <mat-error>Please enter a valid email address.</mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Password</mat-label>
+          <input
+            matInput
+            type="password"
+            formControlName="password"
+            autocomplete="current-password"
+          />
+          @if (
+            password?.hasError("required") &&
+            password!.touched
+          ) {
+            <mat-error>Password is required.</mat-error>
+          }
+        </mat-form-field>
+        <div class="login-options">
+          <a routerLink="/forgot-password"> Forgot Password? </a>
+        </div>
+        <button
+          mat-flat-button
+          type="submit"
+          [disabled]="loginForm.invalid || isSubmitting"
+        >
+          @if (isSubmitting) {
+            <mat-spinner diameter="20"></mat-spinner>
+          } @else {
+            <span>Login</span>
+          }
+        </button>
+      </form>
+    </mat-card>
+  </section>
+</div>

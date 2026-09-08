@@ -1,0 +1,131 @@
+<h2>Assign Course</h2>
+<div class="dialog-content">
+  <div class="assign-layout">
+    <div class="section-heading employee-heading"></div>
+
+    <!-- Search -->
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Search employee</mat-label>
+
+      <input
+        matInput
+        type="text"
+        [formControl]="searchControl"
+        placeholder="Search by name or employee code"
+      />
+
+      @if (searchControl.value) {
+        <button
+          mat-icon-button
+          matSuffix
+          type="button"
+          aria-label="Clear search"
+          (click)="searchControl.setValue('')"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      }
+    </mat-form-field>
+
+    <!-- Employee list -->
+    <div class="employee-list" (scroll)="onScroll($event)">
+      <!-- Select all -->
+      <div class="select-all-row">
+        <mat-checkbox
+          [checked]="areAllVisibleEmployeesSelected()"
+          [indeterminate]="
+            selectedEmployeeIds.size > 0 && !areAllVisibleEmployeesSelected()
+          "
+          (change)="toggleSelectAll()"
+        >
+          Select all
+        </mat-checkbox>
+        <span class="emp-count">
+          <span class="visible-count">
+            {{ employees.length }}
+          </span>
+          <span class="selected-count">
+            {{ selectedEmployeeIds.size }}
+            <span>selected</span>
+          </span>
+        </span>
+      </div>
+
+      <!-- Employees -->
+      <div class="employees-container">
+        @for (employee of employees; track employee.id) {
+          <div
+            class="employee-row"
+            [class.selected]="isEmployeeSelected(employee.id)"
+            (click)="toggleEmployee(employee)"
+          >
+            <mat-checkbox
+              [checked]="isEmployeeSelected(employee.id)"
+              (click)="$event.stopPropagation()"
+              (change)="toggleEmployee(employee)"
+            >
+            </mat-checkbox>
+
+            <div class="employee-info">
+              <div class="employee-name">
+                {{ employee.firstName }}
+                {{ employee.lastName }}
+              </div>
+
+              @if (employee.employeeCode) {
+                <div class="employee-code">
+                  {{ employee.employeeCode }}
+                </div>
+              }
+            </div>
+          </div>
+        }
+
+        <!-- Loading -->
+        @if (loading) {
+          <div class="loading-container">
+            <mat-spinner diameter="30"></mat-spinner>
+
+            <span>Loading employees...</span>
+          </div>
+        }
+
+        <!-- Empty state -->
+        @if (!loading && employees.length === 0) {
+          <div class="empty-state">
+            <mat-icon>person_search</mat-icon>
+
+            <span>No employees found</span>
+
+            @if (searchControl.value) {
+              <small> Try a different search term. </small>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= ACTIONS ================= -->
+
+<div class="dialog-actions">
+  <button mat-button type="button" (click)="close()" [disabled]="assigning">
+    Cancel
+  </button>
+
+  <button
+    mat-flat-button
+    color="primary"
+    type="button"
+    [disabled]="assigning || selectedEmployeeIds.size === 0"
+    (click)="assignCourse()"
+  >
+    @if (assigning) {
+      <mat-spinner diameter="18"></mat-spinner>
+      <span>Assigning...</span>
+    } @else {
+      <span> Assign Course </span>
+    }
+  </button>
+</div>

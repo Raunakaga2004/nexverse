@@ -1,0 +1,212 @@
+<div class="dashboard-content-page page-container">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="header-content">
+      <button mat-icon-button (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <div class="heading">
+        <div>
+          <h2>{{ module?.title }}</h2>
+          <span class="subtitle">
+            {{ module?.description }}
+          </span>
+        </div>
+
+        <span class="header-actions">
+          @if (courseStatus === "DRAFT" && currentDepartmentId) {
+            @if (!reorderMode) {
+              <button mat-stroked-button (click)="startReordering()">
+                <mat-icon>swap_vert</mat-icon>
+                Reorder
+              </button>
+
+              <button mat-flat-button color="primary" (click)="addContent()">
+                <mat-icon>add</mat-icon>
+                Add
+              </button>
+            } @else {
+              <button mat-button (click)="cancelReordering()">Cancel</button>
+
+              <button
+                mat-flat-button
+                color="primary"
+                [disabled]="!hasOrderChanged || savingOrder"
+                (click)="saveOrder()"
+              >
+                @if (savingOrder) {
+                  <mat-spinner diameter="18"></mat-spinner>
+                } @else {
+                  <div class="save-order">
+                    <mat-icon>save</mat-icon>
+                    Save Order
+                  </div>
+                }
+              </button>
+            }
+          }
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  @if (loading) {
+    <div class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+  } @else {
+    <!-- Empty State -->
+    @if (courseStatus === "DRAFT" && contents.length === 0) {
+      <div class="empty-state">
+        <mat-icon>library_books</mat-icon>
+
+        <h3>No Content Available</h3>
+
+        <p>This module doesn't contain any learning content yet.</p>
+
+        <button mat-flat-button color="primary" (click)="addContent()">
+          <mat-icon>add</mat-icon>
+          Add First Content
+        </button>
+      </div>
+    } @else {
+      <!-- Content List -->
+      <div
+        class="content-list"
+        cdkDropList
+        [cdkDropListData]="displayedContents"
+        (cdkDropListDropped)="onContentDrop($event)"
+      >
+        @for (content of displayedContents; track content.id; let i = $index) {
+          <div class="content-card" cdkDrag [cdkDragDisabled]="!reorderMode">
+            <!-- Drag Handle -->
+            @if (reorderMode) {
+              <div class="drag-handle" cdkDragHandle>
+                <mat-icon>drag_indicator</mat-icon>
+              </div>
+            }
+
+            <!-- Content Order -->
+            <div class="content-position">
+              {{ i + 1 }}
+            </div>
+
+            <!-- Content Icon -->
+            <div class="content-icon">
+              @switch (content.contentType) {
+                @case ("VIDEO") {
+                  <mat-icon>play_circle</mat-icon>
+                }
+
+                @case ("DOCUMENT") {
+                  <mat-icon>description</mat-icon>
+                }
+
+                @case ("TEXT") {
+                  <mat-icon>article</mat-icon>
+                }
+
+                @default {
+                  <mat-icon>folder</mat-icon>
+                }
+              }
+            </div>
+
+            <!-- Content Details -->
+            <div class="content-details">
+              <div class="title">
+                {{ content.title }}
+              </div>
+
+              <div class="meta">
+                <mat-chip ngClass="">
+                  {{ content.contentType | titlecase }}
+                </mat-chip>
+
+                @if (content.estimatedDurationSeconds) {
+                  <mat-chip ngClass="">
+                    {{ content.estimatedDurationSeconds | duration }}
+                  </mat-chip>
+                }
+
+                @if (content.isMandatory) {
+                  <mat-chip ngClass="mandatory-chip"> Mandatory </mat-chip>
+                }
+              </div>
+            </div>
+
+            <!-- Normal Actions -->
+            @if (!reorderMode) {
+              <div class="content-actions">
+                @if (module?.hasAccess) {
+                  <button
+                    mat-icon-button
+                    matTooltip="View Content"
+                    (click)="viewContent(content)"
+                  >
+                    <mat-icon>visibility</mat-icon>
+                  </button>
+                }
+
+                @if (courseStatus === "DRAFT" && currentDepartmentId) {
+                  <button
+                    mat-icon-button
+                    matTooltip="Edit Content"
+                    (click)="editContent(content)"
+                  >
+                    <mat-icon>edit</mat-icon>
+                  </button>
+
+                  <button
+                    mat-icon-button
+                    matTooltip="Delete Content"
+                    (click)="deleteContent(content)"
+                  >
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                }
+              </div>
+            }
+
+            <!-- Drag Preview -->
+            @if (reorderMode) {
+              <ng-template cdkDragPreview>
+                <div class="content-card drag-preview">
+                  <div class="drag-handle">
+                    <mat-icon>drag_indicator</mat-icon>
+                  </div>
+
+                  <div class="content-position">
+                    {{ i + 1 }}
+                  </div>
+                  <div class="content-icon">
+                    @switch (content.contentType) {
+                      @case ("VIDEO") {
+                        <mat-icon>play_circle</mat-icon>
+                      }
+                      @case ("DOCUMENT") {
+                        <mat-icon>description</mat-icon>
+                      }
+                      @case ("TEXT") {
+                        <mat-icon>article</mat-icon>
+                      }
+                      @default {
+                        <mat-icon>folder</mat-icon>
+                      }
+                    }
+                  </div>
+                  <div class="content-details">
+                    <div class="title">
+                      {{ content.title }}
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            }
+          </div>
+        }
+      </div>
+    }
+  }
+</div>

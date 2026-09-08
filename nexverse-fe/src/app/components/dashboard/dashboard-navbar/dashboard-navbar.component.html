@@ -1,0 +1,61 @@
+<mat-toolbar class="dashboard-navbar">
+  <a class="dashboard-navbar-logo" [routerLink]="'/dashboard'">
+    @if (currentUser.role == "SUPER_ADMIN") {
+      <img src="logos/nexverse-logo.png" />
+      NexVerse
+    } @else {
+      @if (currentUser.organizationLogoUrl) {
+        <img
+          class="organization-logo"
+          [src]="companyLogoUrl"
+          [alt]="currentUser.organizationName"
+        />
+      }
+      @if (currentUser.organizationName) {
+        <div class="organization-details">
+          <span class="organizationName">
+            {{ currentUser.organizationName }}
+          </span>
+          @if (currentUser.departmentName) {
+            <span class="department-name">{{ currentUser.departmentName }}</span>
+          }
+        </div>
+      }
+    }
+  </a>
+  <button [matMenuTriggerFor]="profileMenu" class="profile-button">
+    <div class="avatar">
+      @if (currentUser.profileImageUrl) {
+        <img
+          class="profile-image"
+          [src]="profileImageUrl"
+          [alt]="currentUser.firstName + ' ' + currentUser.lastName"
+        />
+      } @else {
+        {{ currentUser.firstName.charAt(0).toUpperCase() }}
+      }
+    </div>
+    <div class="user-info">
+      <span class="user-name">
+        {{ currentUser.firstName }}
+        {{ currentUser.lastName }}
+      </span>
+      @if (currentUser.role === "SUPER_ADMIN") {
+        <span class="role">SUPER ADMIN</span>
+      } @else {
+        <span class="role">{{ currentUser.role }}</span>
+      }
+    </div>
+    <mat-icon>keyboard_arrow_down</mat-icon>
+  </button>
+</mat-toolbar>
+<mat-menu #profileMenu="matMenu" xPosition="before" class="navbar-menu">
+  <button mat-menu-item class="view-profile-button">
+    <mat-icon>person</mat-icon>
+    <span>Profile</span>
+  </button>
+  <button mat-menu-item (click)="logout()" class="logout-button">
+    <mat-icon>logout</mat-icon>
+    <span>Logout</span>
+  </button>
+</mat-menu>

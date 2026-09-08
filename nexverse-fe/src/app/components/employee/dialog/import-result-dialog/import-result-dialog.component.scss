@@ -1,0 +1,86 @@
+mat-dialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.result-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  h3 {
+    margin: 12px 0 4px;
+  }
+
+  p {
+    margin: 0;
+    color: rgb(117, 117, 117);
+  }
+}
+
+.result-icon {
+  font-size: 64px;
+  width: 64px;
+  height: 64px;
+
+  &.success {
+    color: #2e7d32;
+  }
+
+  &.warning {
+    color: #ed6c02;
+  }
+}
+
+.summary {
+  mat-card-content {
+    display: flex;
+    justify-content: space-around;
+    padding: 24px;
+  }
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  span {
+    font-size: 13px;
+    color: rgb(117, 117, 117);
+  }
+
+  strong {
+    font-size: 28px;
+    margin-top: 6px;
+  }
+}
+
+.success strong {
+  color: #2e7d32;
+}
+
+.failed strong {
+  color: #d32f2f;
+}
+
+.errors {
+  display: flex;
+  justify-content: center;
+}
+
+table {
+  width: 100%;
+}
+
+code {
+  background: #f5f5f5;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+mat-dialog-actions {
+  padding: 16px 24px;
+}

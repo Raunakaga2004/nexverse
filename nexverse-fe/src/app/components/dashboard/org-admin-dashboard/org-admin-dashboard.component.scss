@@ -1,0 +1,111 @@
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.loading-container {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.metrics-grid {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.metric-card {
+  flex: 1;
+  min-width: 220px;
+  mat-card-content {
+    padding: 24px;
+  }
+  .metric-label {
+    font-size: 14px;
+  }
+  h2 {
+    margin-top: 12px;
+    margin-bottom: 0;
+    font-size: 34px;
+    font-weight: 600;
+  }
+}
+mat-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  // margin-bottom: 20px;
+  // font-weight: 600;
+}
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+.recent-organizations-table {
+  width: 100%;
+}
+.recent-organization-card {
+  padding-top: 20px;
+}
+.spacer {
+  margin-bottom: 20px;
+}
+.dashboard-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-bottom: 28px;
+}
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 0 28px;
+  h2 {
+    margin: 0;
+  }
+}
+.chart-card {
+  padding-top: 20px;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  // mat-card-content {
+  //   margin-top: 12px;
+  // }
+  .storage-used-card {
+    h2 {
+      margin-top: 0;
+    }
+    max-height: 180px;
+  }
+}
+
+.distribution-row {
+  margin-bottom: 20px;
+}
+
+.distribution-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.storage-footer {
+  margin-top: -14px;
+  color: var(--mat-sys-on-surface-variant);
+  font-size: 14px;
+}
+
+mat-progress-bar {
+  border-radius: 6px;
+}
+
+.department-distribution {
+  margin-top: 28px;
+}

@@ -1,0 +1,245 @@
+@use "@angular/material" as mat;
+@use "./styles/themes/material-theme";
+@use "./styles/variables";
+
+html {
+  @include mat.theme(
+    (
+      color: (
+        theme-type: light,
+        primary: mat.$azure-palette,
+        tertiary: mat.$blue-palette,
+      ),
+      typography: Roboto,
+      density: 0,
+    )
+  );
+} /* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  scrollbar-color: #d8d8d8 transparent;
+}
+.success-snackbar {
+  --mdc-snackbar-container-color: #2e7d32;
+  --mat-snack-bar-button-color: #ffffff;
+  --mdc-snackbar-supporting-text-color: #ffffff;
+}
+.error-snackbar {
+  --mdc-snackbar-container-color: #d32f2f;
+  --mat-snack-bar-button-color: #ffffff;
+  --mdc-snackbar-supporting-text-color: #ffffff;
+}
+.warning-snackbar {
+  --mdc-snackbar-container-color: #ed6c02;
+  --mat-snack-bar-button-color: #ffffff;
+  --mdc-snackbar-supporting-text-color: #ffffff;
+}
+.info-snackbar {
+  --mdc-snackbar-container-color: #1976d2;
+  --mat-snack-bar-button-color: #ffffff;
+  --mdc-snackbar-supporting-text-color: #ffffff;
+}
+
+.mat-expansion-panel.mat-expansion-panel {
+  background-color: #f7f3f2;
+}
+
+.invalid-error-message {
+  background: #f5c5c5;
+  font-size: 13px;
+  padding: 8px;
+  min-height: 20px;
+  margin-bottom: 40px;
+}
+
+.validation-message {
+  background: #c3c3c3;
+  font-size: 13px;
+  padding: 8px;
+  min-height: 20px;
+  margin-bottom: 40px;
+}
+
+.mat-mdc-row {
+  cursor: pointer;
+}
+.mat-mdc-row:hover {
+  background-color: #f8f6f3;
+}
+
+mat-chip {
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 16px;
+  padding: 5px;
+}
+
+.active,
+.approved {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+.pending {
+  background: #faf9ed;
+  color: #cfaa04;
+}
+.suspended,
+.rejected {
+  background: #fdecea;
+  color: #c62828;
+}
+
+.skill-chip,
+.primary-chip {
+  color: var(--color-primary);
+  background-color: #f7f3f2;
+}
+
+.primary-chip {
+  font-size: 16px;
+}
+
+.skill-chip {
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border:#fed7a6 solid 1px;
+  .skill-icon {
+    height: auto;
+    .skill-icon-tooltip {
+      --mdc-plain-tooltip-container-color: #1a6ef5;
+      --mdc-plain-tooltip-supporting-text-color: white;
+    }
+  }
+}
+
+h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #363636;
+  margin-top: 4px;
+  margin-bottom: 3px;
+}
+.spacer {
+  margin-bottom: 12px;
+}
+
+mat-divider {
+  --mat-divider-color: #d5d5d5;
+  --mdc-divider-color: #d5d5d5;
+}
+
+.dashboard-content-page {
+  padding: 20px;
+}
+
+.required-asterisk {
+  line-height: 1;
+}
+
+.dialog-box .mat-mdc-dialog-container .mdc-dialog__surface {
+  border-radius: 4px;
+}
+
+button.mat-mdc-button,
+button.mat-mdc-raised-button,
+button.mat-mdc-outlined-button,
+button.mat-mdc-unelevated-button {
+  border-radius: 4px;
+}
+
+mat-card.mat-mdc-card {
+  border-radius: 4px;
+}
+mat-card.mat-mdc-card.mdc-card {
+  border-radius: 4px;
+}
+.skill-icon-tooltip {
+  --mdc-plain-tooltip-container-color: var(--color-primary);
+  --mdc-plain-tooltip-supporting-text-color: #fff;
+
+  font-size: 14px;
+  line-height: 1.5;
+  max-width: 300px;
+  white-space: normal;
+  border-radius: 8px;
+}
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+
+  a {
+    color: #4b5563;
+    text-decoration: none;
+    font-weight: 500;
+
+    &:hover {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+
+  span {
+    color: #4b5563;
+  }
+
+  mat-icon {
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
+    color: #9ca3af;
+  }
+}
+.avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+.profile-image {
+  width: 38px;
+  height: 38px;
+}
+mat-form-field.mat-mdc-form-field .mat-mdc-form-field-infix {
+  min-height: 46px;
+  min-width: 40px;
+}
+
+.mat-mdc-form-field.mat-form-field-appearance-outline
+  .mat-mdc-form-field-infix {
+  padding-top: 11px;
+  padding-bottom: 11px;
+}
+
+.mat-mdc-form-field .mdc-floating-label {
+  top: 40%;
+}
+
+.mat-mdc-form-field:not(.mat-focused)
+  .mdc-floating-label:not(.mdc-floating-label--float-above) {
+  transform: translateY(-85%);
+}
+.mat-mdc-option {
+  --mdc-list-list-item-one-line-container-height: 40px;
+}
+.mat-mdc-outlined-button {
+  --mdc-outlined-button-outline-color: var(--color-primary);
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

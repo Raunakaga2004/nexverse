@@ -1,0 +1,54 @@
+.login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: var(--color-background);
+  .login-branding {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-right: 80px;
+    .hero-image {
+      max-width: 500px;
+      text-align: center;
+    }
+    p {
+      font-size: 1.1rem;
+      color: var(--color-primary);
+      max-width: 550px;
+      line-height: 1.7;
+    }
+  }
+  .login-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    h2 {
+      margin-bottom: 48px;
+    }
+  }
+  mat-card {
+    width: 420px;
+    padding: 48px;
+  }
+  mat-form-field {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  .login-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    a {
+      text-decoration: none;
+      color: var(--color-text-primary);
+    }
+  }
+  button {
+    width: 100%;
+    height: 48px;
+  }
+}

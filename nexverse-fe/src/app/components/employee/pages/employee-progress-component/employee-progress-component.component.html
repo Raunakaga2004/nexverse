@@ -1,0 +1,290 @@
+<div class="employee-progress-page dashboard-content-page">
+  @if (loading) {
+    <div class="loading-state">
+      <mat-spinner diameter="40"></mat-spinner>
+      <span>Loading learning progress...</span>
+    </div>
+  }
+
+  @if (!loading && errorMessage) {
+    <mat-card class="error-card">
+      <mat-card-content>
+        <mat-icon>error_outline</mat-icon>
+
+        <div class="error-content">
+          <h3>Unable to load progress</h3>
+          <p>{{ errorMessage }}</p>
+        </div>
+
+        <button mat-stroked-button type="button" (click)="retry()">
+          Retry
+        </button>
+      </mat-card-content>
+    </mat-card>
+  }
+
+  @if (!loading && !errorMessage && progress) {
+    <div class="page-header">
+      <div class="breadcrumb">
+        <a routerLink="/dashboard/employees"> Employees </a>
+        <mat-icon>chevron_right</mat-icon>
+        <span>Learning Progress</span>
+      </div>
+      <div class="header-left">
+        <div class="employee-info" (click)="viewEmployee(employeeId)">
+          <div class="employee-details">
+            <div class="avatar">
+              @if (profileImageUrl) {
+                <img
+                  [src]="profileImageUrl"
+                  alt="Profile Image"
+                  class="profile-image"
+                />
+              } @else {
+                {{ progress.employeeName.charAt(0).toUpperCase() }}
+              }
+            </div>
+            <div class="employee-name-email">
+              <h2>{{ progress.employeeName }}</h2>
+              <p>{{ progress.employeeEmail }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="overview-grid">
+          <mat-card class="overview-card overall-progress-card">
+            <mat-card-content class="metric-card">
+              <span class="metric-label">
+                <mat-icon>trending_up</mat-icon>
+                Overall Progress
+              </span>
+              <h3 class="overall-progress-value">
+                {{ overallProgress | number: "1.0-1" }}%
+              </h3>
+
+              <mat-progress-bar
+                mode="determinate"
+                [value]="overallProgress"
+              ></mat-progress-bar>
+            </mat-card-content>
+          </mat-card>
+
+          <!-- Total Courses -->
+          <mat-card class="overview-card">
+            <mat-card-content class="metric-card">
+              <span class="metric-label">
+                <mat-icon>school</mat-icon>
+                Total Courses
+              </span>
+              <h2>{{ totalCourses }}</h2>
+            </mat-card-content>
+          </mat-card>
+
+          <!-- Completed -->
+          <mat-card class="overview-card">
+            <mat-card-content class="metric-card">
+              <span class="metric-label">
+                <mat-icon>check_circle</mat-icon>
+                Completed
+              </span>
+              <h2>{{ completedCourses }}</h2>
+            </mat-card-content>
+          </mat-card>
+
+          <!-- In Progress -->
+          <mat-card class="overview-card">
+            <mat-card-content class="metric-card">
+              <span class="metric-label">
+                <mat-icon>play_circle</mat-icon>
+                In Progress
+              </span>
+              <h2>{{ inProgressCourses }}</h2>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+    <section class="courses-section">
+      <div class="section-heading">
+        <mat-divider></mat-divider>
+        <div class="filter-section">
+          <mat-form-field appearance="outline" class="search-field">
+            <mat-label>Search Courses</mat-label>
+            <input matInput placeholder="" [formControl]="searchControl" />
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Progress Status</mat-label>
+
+            <mat-select [formControl]="progressStatusControl">
+              <mat-option value="ALL">All</mat-option>
+              <mat-option value="NOT_STARTED">Not Started</mat-option>
+              <mat-option value="IN_PROGRESS">In Progress</mat-option>
+              <mat-option value="COMPLETED">Completed</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Request Status</mat-label>
+
+            <mat-select [formControl]="requestStatusControl">
+              <mat-option value="ALL">All</mat-option>
+              <mat-option value="PENDING">Pending</mat-option>
+              <mat-option value="APPROVED">Approved</mat-option>
+              <mat-option value="REJECTED">Rejected</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Enrollment Type</mat-label>
+
+            <mat-select [formControl]="enrollmentTypeControl">
+              <mat-option value="ALL">All</mat-option>
+              <mat-option value="SELF_ENROLLED">Self Enrolled</mat-option>
+              <mat-option value="DEPARTMENT_ASSIGNED"
+                >Department Assigned</mat-option
+              >
+              <mat-option value="SELF_REQUESTED">Self Requested</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <mat-divider class="after-filters"></mat-divider>
+      </div>
+      @if (!loading && courses.length === 0) {
+        <app-no-data
+          icon="school"
+          title="No Courses Found"
+          message="No courses in learning list."
+        ></app-no-data>
+      } @else {
+        <div class="course-grid">
+          @for (course of courses; track course.courseId) {
+            <mat-card class="course-card" (click)="viewCourse(course.courseId)">
+              <!-- Thumbnail -->
+              <div class="course-thumbnail">
+                <img
+                  [src]="`${apiUrl}/course/${course.courseId}/thumbnail`"
+                  [alt]="course.courseTitle"
+                />
+
+                <!-- Status overlay -->
+                <div
+                  class="course-status"
+                  [class.completed]="course.status === 'COMPLETED'"
+                  [class.in-progress]="course.status === 'IN_PROGRESS'"
+                  [class.not-started]="course.status === 'NOT_STARTED'"
+                >
+                  @if (course.status === "COMPLETED") {
+                    <mat-icon>check_circle</mat-icon>
+                    <span>Completed</span>
+                  } @else if (course.status === "IN_PROGRESS") {
+                    <mat-icon>play_circle</mat-icon>
+                    <span>In Progress</span>
+                  } @else {
+                    <mat-icon>schedule</mat-icon>
+                    <span>Not Started</span>
+                  }
+                </div>
+              </div>
+
+              <mat-card-header>
+                <mat-card-title>
+                  {{ course.courseTitle }}
+                </mat-card-title>
+                <div class="last-access">
+                  <mat-icon>history</mat-icon>
+
+                  @if (course.lastAccessedAt) {
+                    <span>
+                      Last accessed
+                      {{ course.lastAccessedAt | date: "mediumDate" }}
+                    </span>
+                    <span>|</span>
+                    @if (course.startedAt) {
+                      <span>
+                        Started at {{ course.startedAt | date: "mediumDate" }}
+                      </span>
+                    }
+                  } @else {
+                    <span> Not accessed yet </span>
+                  }
+                </div>
+              </mat-card-header>
+
+              <mat-card-content>
+                <!-- Progress -->
+                <div class="course-progress">
+                  <div class="progress-header">
+                    <span>Course Progress</span>
+
+                    <strong>
+                      {{ course.progressPercent | number: "1.0-1" }}%
+                    </strong>
+                  </div>
+
+                  <mat-progress-bar
+                    mode="determinate"
+                    [value]="course.progressPercent"
+                  ></mat-progress-bar>
+                </div>
+
+                <!-- Course Stats -->
+                <div class="course-stats">
+                  <div class="course-stat">
+                    <mat-icon>view_module</mat-icon>
+
+                    <div>
+                      <span>Modules</span>
+                      <strong>
+                        {{ course.completedModules }}
+                        /
+                        {{ course.totalModules }}
+                      </strong>
+                    </div>
+                  </div>
+
+                  <div class="course-stat">
+                    <mat-icon>article</mat-icon>
+
+                    <div>
+                      <span>Contents</span>
+                      <strong>
+                        {{ course.completedContents }}
+                        /
+                        {{ course.totalContents }}
+                      </strong>
+                    </div>
+                  </div>
+
+                  <div class="course-stat">
+                    <mat-icon>schedule</mat-icon>
+
+                    <div>
+                      <span>Duration</span>
+
+                      <strong>
+                        {{
+                          course.estimatedDurationSeconds | duration
+                        }}
+                      </strong>
+                    </div>
+                  </div>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          }
+        </div>
+      }
+      @if (totalElements > 6) {
+        <mat-paginator
+          [length]="totalElements"
+          [pageIndex]="page - 1"
+          [pageSize]="size"
+          [pageSizeOptions]="[6, 12, 24]"
+          (page)="onPageChange($event)"
+        >
+        </mat-paginator>
+      }
+    </section>
+  }
+</div>

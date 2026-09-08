@@ -1,0 +1,57 @@
+.header-section{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    mat-dialog-actions {
+        display: flex;
+        gap: 20px;
+    }
+}
+.content-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 650px;
+//   padding-top: 8px;
+}
+ 
+.full-width {
+  width: 100%;
+}
+ 
+.toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  span{
+    font-size: 16px;
+  color: #4f4f4f;
+  }
+}
+.content-type-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.content-type-and-duration{
+    display: flex;
+    gap: 60px;
+    align-items: center;
+    mat-form-field{
+      flex: 0.45;
+    }
+}
+ 
+.rich-text {
+ 
+  textarea {
+    resize: vertical;
+  }
+}
+ 
+mat-dialog-content {
+  max-height: 70vh;
+  overflow-y: auto;
+}

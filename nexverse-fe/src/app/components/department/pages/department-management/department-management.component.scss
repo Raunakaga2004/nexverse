@@ -1,0 +1,46 @@
+.departments-card {
+  padding-top: 20px;
+}
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  button {
+    height: 36px;
+    padding: 0 22px;
+    mat-icon {
+      margin-right: 8px;
+    }
+  } 
+}
+.warning{
+  padding: 0 2px;
+  width: fit-content;
+  border-radius: 4px;
+  background-color: #fff4ea;
+  color: #f57c00;
+  display: flex;
+  align-items: center;
+  mat-icon{
+    font-size: 16px;
+    height: 16px;
+  }
+}
+.heading-separation {
+    margin-bottom: 20px;
+  }
+.toolbar {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  padding: 0 16px;
+  mat-form-field {
+    min-width: 180px;
+  }
+}
+th {
+  font-weight: 600;
+  color: #363636;
+}

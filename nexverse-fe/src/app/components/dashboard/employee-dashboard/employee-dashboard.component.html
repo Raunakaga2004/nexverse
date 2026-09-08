@@ -1,0 +1,101 @@
+@if (loading) {
+  <div class="loading-container">
+    <mat-spinner diameter="50"></mat-spinner>
+  </div>
+} @else {
+  <div class="dashboard-content-page dashboard">
+    <section class="metrics-grid">
+      <mat-card class="metric-card">
+        <mat-card-content>
+          <span class="metric-label"> Learning Time </span>
+          <h2>{{ dashboardData.metrics.learningHours | duration }}</h2>
+        </mat-card-content>
+      </mat-card>
+      <mat-card class="metric-card">
+        <mat-card-content>
+          <span class="metric-label"> Assigned Courses </span>
+          <h2>{{ dashboardData.metrics.assignedCourses }}</h2>
+        </mat-card-content>
+      </mat-card>
+      <mat-card class="metric-card">
+        <mat-card-content>
+          <span class="metric-label"> Courses In Progress </span>
+          <h2>
+            {{ dashboardData.metrics.inProgressCourses }}
+          </h2>
+        </mat-card-content>
+      </mat-card>
+      <mat-card class="metric-card">
+        <mat-card-content>
+          <span class="metric-label"> Completed Courses </span>
+          <h2>
+            {{ dashboardData.metrics.completedCourses }}
+          </h2>
+        </mat-card-content>
+      </mat-card>
+    </section>
+    <section class="continue-learning-section">
+      <mat-card class="continue-learning-card">
+        <div class="section-header">
+          <h2>Continue Learning</h2>
+          <a mat-button color="primary" routerLink="/dashboard/my-learning">
+            My learning <mat-icon>chevron_right</mat-icon>
+          </a>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <mat-card-content>
+          @if (recentInProgressCourses.length === 0) {
+            <app-no-data
+              icon="school"
+              title="No Courses In Progress"
+              message="Courses you start will appear here."
+            ></app-no-data>
+          } @else {
+            <div class="course-grid">
+              @for (course of recentInProgressCourses; track course.id) {
+                <mat-card
+                  class="course-card"
+                  [routerLink]="`/learning/${course.id}`"
+                >
+                  <div class="course-thumbnail">
+                    <img
+                      [src]="`${apiUrl}/course/${course.id}/thumbnail`"
+                      [alt]="course.title"
+                    />
+                  </div>
+
+                  <mat-card-content>
+                    <h3 class="course-title">
+                      {{ course.title }}
+                    </h3>
+
+                    <p class="last-accessed">
+                      Last accessed
+                      {{ course.lastAccessedAt | date: "dd MMM yyyy" }}
+                    </p>
+
+                    <div class="course-footer">
+                      <mat-chip color="primary"> In Progress </mat-chip>
+
+                      <span class="progress-text">
+                        {{ course.progressPercent }}%
+                      </span>
+                    </div>
+
+                    <mat-progress-bar
+                      mode="determinate"
+                      [value]="course.progressPercent"
+                    >
+                    </mat-progress-bar>
+                  </mat-card-content>
+                </mat-card>
+              }
+            </div>
+          }
+        </mat-card-content>
+      </mat-card>
+    </section>
+  </div>
+}
