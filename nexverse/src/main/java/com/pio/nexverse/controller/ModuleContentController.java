@@ -72,7 +72,7 @@ public class ModuleContentController {
         return ResponseEntity.ok(response);
     }
 
-    @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN', 'EMPLOYEE)")
+    @PreAuthorize("hasAnyAuthority('MANAGER', 'ADMIN', 'EMPLOYEE')")
     @GetMapping("/module-content/{contentId}/document")
     public ResponseEntity<Resource> getContentFile(@PathVariable Long contentId) {
         return moduleContentService.getDocumentContent(contentId);

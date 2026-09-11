@@ -174,8 +174,11 @@ public class CourseServiceImpl implements CourseService {
         Course course = courseAuthorizationService.getCourseForView(courseId);
         CourseResponseDTO courseResponse = modelMapper.map(course, CourseResponseDTO.class);
         courseResponse.setHasAccess(hasAccessOfCourse(course));
-        DepartmentCourseAccess departmentCourseAccess = departmentCourseAccessRepository.findByCourseIdAndRequestingDepartmentId(courseId, currentUserService.getCurrentDepartment().getId()).orElseThrow(DepartmentNotFoundException::new);
-        courseResponse.setRequestStatus(departmentCourseAccess.getRequestStatus());
+        if(currentUserService.getCurrentUser().getRole() == Role.MANAGER){
+            DepartmentCourseAccess departmentCourseAccess = departmentCourseAccessRepository.findByCourseIdAndRequestingDepartmentId(courseId, currentUserService.getCurrentDepartment().getId()).orElseThrow(DepartmentNotFoundException::new);
+            courseResponse.setRequestStatus(departmentCourseAccess.getRequestStatus());
+        }
+
         return courseResponse;
     }
 
